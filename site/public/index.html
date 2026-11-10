@@ -128,7 +128,11 @@ textarea[hidden]{display:none}
         <dt>Número</dt><dd>000 000 000 00</dd>
         <dt>Titular</dt><dd>NOMBRE DEL TITULAR · C.C. 000.000.000</dd>
       </dl>
-      <div class="total" style="margin:14px 0"><span>Total a transferir</span><span id="tot">$0</span></div>
+      <div style="display:grid;gap:8px;margin:6px 0 12px">
+        <label class="chk"><input type="radio" name="pago" value="completo" checked>Pago completo ahora</label>
+        <label class="chk"><input type="radio" name="pago" value="mitad">Pago el 50% ahora y el resto al recibir mi pedido</label></div>
+      <ul class="resumen" id="pagoDet"></ul>
+      <div class="total" style="margin:14px 0"><span>Total a transferir hoy</span><span id="tot">$0</span></div>
       <label>Sube tu comprobante (foto o PDF)<input type="file" id="comp" accept="image/*,.pdf" required></label></div>
 
     <div class="panel"><h3>Resumen</h3><ul class="resumen" id="res"><li>Aún no has agregado nada</li></ul></div>
@@ -175,9 +179,11 @@ PRODUCTOS.forEach(p=>{qty[p.id]=0;
  lista.appendChild(d)});
 lista.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
  const id=b.dataset.id;qty[id]=Math.max(0,Math.min(20,qty[id]+ +b.dataset.d));$('#q-'+id).textContent=qty[id];resumen()});
+const pagos=t=>{const m=document.querySelector('input[name=pago]:checked').value==='mitad';return{m,h:m?Math.round(t/2):t}};
 function resumen(){const sel=PRODUCTOS.filter(p=>qty[p.id]);const t=sel.reduce((a,p)=>a+precio(p)*qty[p.id],0);
  $('#res').innerHTML=sel.length?sel.map(p=>`<li><span>${qty[p.id]} × ${p.nombre}</span><span>${cop(precio(p)*qty[p.id])}</span></li>`).join(''):'<li>Aún no has agregado nada</li>';
- $('#tot').textContent=cop(t);return t}
+ const {m,h}=pagos(t);$('#tot').textContent=cop(h);
+ $('#pagoDet').innerHTML=`<li><span>Total del pedido</span><span>${cop(t)}</span></li>`+(m?`<li><span>Pagas al recibir</span><span>${cop(t-h)}</span></li>`:'');return t}
 
 // Calendario de rango
 const base=PRIMERA||INICIO;let vista=new Date(base.getFullYear(),base.getMonth(),1),a=null,b=null;
@@ -196,6 +202,7 @@ $('#cal').addEventListener('click',e=>{const t=e.target.closest('button');if(!t)
 $('#prev').onclick=()=>{vista=new Date(vista.getFullYear(),vista.getMonth()-1,1);dibujar()};
 $('#next').onclick=()=>{vista=new Date(vista.getFullYear(),vista.getMonth()+1,1);dibujar()};
 dibujar();resumen();
+document.querySelectorAll('input[name=pago]').forEach(r=>r.onchange=resumen);
 $('#precioAviso').innerHTML=PREVENTA?'<b>Preventa:</b> precios especiales hasta el 30 de noviembre. Desde el 1 de diciembre los pedidos tienen un incremento del 20%. Puedes agregar una mini carta escrita a mano.':'Desde el 1 de diciembre los precios tienen un incremento del 20%. La mini carta escrita a mano sigue incluida.';
 if(PRIMERA)$('#disp').innerHTML=`Si pides hoy, tu primera fecha disponible es el <b>${fmt(PRIMERA)}</b>. Para recibirlo esa semana puedes pedir hasta el <b>${fmt(limitePedido(PRIMERA))}</b>.`;
 else{$('#disp').textContent='Ya cerramos los pedidos de Navidad. ¡Gracias por acompañarnos!';$('#enviar').disabled=true}
@@ -212,14 +219,14 @@ function leer(file){return new Promise((ok,no)=>{
  else{if(file.size>3e6)return no(new Error('big'));const r=new FileReader();r.onload=()=>ok({filename:file.name,content:r.result.split(',')[1]});r.onerror=no;r.readAsDataURL(file)}})}
 
 $('#f').addEventListener('submit',async e=>{e.preventDefault();const msg=$('#msg');msg.className='';msg.style.display='none';
- const total=resumen();const show=(t,c)=>{msg.textContent=t;msg.className=c;msg.scrollIntoView({block:'center'})};
+ const total=resumen(),{m,h}=pagos(total);const show=(t,c)=>{msg.textContent=t;msg.className=c;msg.scrollIntoView({block:'center'})};
  if(!total)return show('Agrega al menos un producto.','err');
  if(!a||!b)return show('Elige el rango de fechas en el calendario.','err');
  const btn=$('#enviar');btn.disabled=true;btn.textContent='Enviando…';
  try{const fd=new FormData(e.target),comprobante=await leer($('#comp').files[0]);
   const r=await fetch('/api/pedido',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
    nombre:fd.get('nombre'),whatsapp:fd.get('whatsapp'),email:fd.get('email'),municipio:fd.get('municipio'),direccion:fd.get('direccion'),notas:fd.get('notas'),carta:$('#cartaChk').checked?fd.get('carta'):'',preventa:PREVENTA,
-   desde:fmt(a),hasta:fmt(b),total,comprobante,
+   desde:fmt(a),hasta:fmt(b),total,pago:m?'mitad':'completo',anticipo:h,saldo:total-h,comprobante,
    items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({nombre:p.nombre,cantidad:qty[p.id]}))})});
   if(!r.ok)throw 0;
   show('¡Gracias! Recibimos tu precompra. Te escribiremos por WhatsApp para confirmarla.','ok');e.target.reset();$('#carta').hidden=true;Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()

@@ -3,7 +3,7 @@
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
   try {
-    const { nombre, whatsapp, email, municipio, direccion, carta, preventa, notas, desde, hasta, items, total, comprobante } = req.body || {};
+    const { nombre, whatsapp, email, municipio, direccion, carta, preventa, pago, anticipo, saldo, notas, desde, hasta, items, total, comprobante } = req.body || {};
     if (!nombre || !whatsapp || !items?.length || !desde || !hasta || !comprobante?.content)
       return res.status(400).json({ error: 'Faltan datos del pedido' });
 
@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
     const html = `<h2>Nuevo pedido de Navidad</h2>
       <p><b>${esc(nombre)}</b><br>WhatsApp: ${esc(whatsapp)}<br>Correo: ${esc(email)}<br>Municipio: ${esc(municipio)}<br>Dirección / punto de encuentro: ${esc(direccion)}</p>
       <p>Quiere recibirlo entre <b>${esc(desde)}</b> y <b>${esc(hasta)}</b></p>
-      <ul>${lista}</ul><p><b>Total: $${Number(total).toLocaleString('es-CO')}</b></p>
+      <ul>${lista}</ul><p><b>Total: $${Number(total).toLocaleString('es-CO')}</b><br>${pago === 'mitad' ? `Pagó el 50% ($${Number(anticipo).toLocaleString('es-CO')}). <b>Saldo a cobrar en la entrega: $${Number(saldo).toLocaleString('es-CO')}</b>` : 'Pago completo'}</p>
       <p>Notas: ${esc(notas)}</p><p><b>Mini carta:</b> ${carta ? esc(carta) : 'No'}</p><p>${preventa ? 'Precio de preventa' : 'Precio con incremento del 20%'}</p><p>El comprobante de pago va adjunto.</p>`;
 
     const r = await fetch('https://api.resend.com/emails', {
@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
         from: process.env.PEDIDOS_FROM || 'Pedidos <onboarding@resend.dev>',
         to: [process.env.PEDIDOS_TO],
         reply_to: email || undefined,
-        subject: `Pedido Navidad – ${nombre}`,
+        subject: `Pedido Navidad – ${nombre}${pago === 'mitad' ? ' (50% + saldo en entrega)' : ''}`,
         html,
         attachments: [{ filename: comprobante.filename || 'comprobante', content: comprobante.content }],
       }),
