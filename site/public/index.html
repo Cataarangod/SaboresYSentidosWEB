@@ -44,7 +44,7 @@ section>.wrap>h2{font-size:30px;color:var(--cafe);margin-bottom:6px}
 form{display:grid;gap:18px}
 .campos{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 label{display:grid;gap:5px;font-weight:600;font-size:15px}
-input,textarea{font:inherit;padding:11px 12px;border:1px solid #cdbfa8;border-radius:4px;background:#fff;color:var(--tinta)}
+input,textarea,select{font:inherit;padding:11px 12px;border:1px solid #cdbfa8;border-radius:4px;background:#fff;color:var(--tinta)}
 textarea{min-height:76px;resize:vertical}
 .full{grid-column:1/-1}
 .panel{background:var(--papel);border:1px solid var(--linea);border-radius:6px;padding:20px}
@@ -64,6 +64,10 @@ textarea{min-height:76px;resize:vertical}
 #msg{padding:14px;border-radius:4px;display:none}
 .ok{background:#e4ecc9;display:block!important}.err{background:#f3d9d0;display:block!important}
 footer{padding:30px 0;text-align:center;color:#6b5a4d;font-size:15px;border-top:1px solid var(--linea)}
+.aviso{background:#e4ecc9;border-radius:4px;padding:12px 14px;margin:0 0 14px;font-size:15px}
+.precio small{display:block;font:400 13px 'Nunito Sans',sans-serif;color:#8a7a6b;text-align:right}
+.chk{display:flex!important;align-items:center;gap:8px}.chk input{width:18px;height:18px}
+textarea[hidden]{display:none}
 @media(max-width:700px){.hero{grid-template-columns:1fr;padding:32px 0}.caja{grid-template-columns:1fr auto}.caja .qty{grid-column:1/-1}.campos{grid-template-columns:1fr}}
 </style>
 </head>
@@ -98,19 +102,22 @@ footer{padding:30px 0;text-align:center;color:#6b5a4d;font-size:15px;border-top:
   <h2>Haz tu precompra</h2>
   <p class="sub">Elige tus cajas, cuéntanos cuándo las quieres y sube el comprobante de tu transferencia.</p>
   <form id="f">
-    <div class="panel"><h3>1. Escoge tu presentación</h3><div class="cajas" id="lista"></div></div>
+    <div class="panel"><h3>1. Escoge tu presentación</h3><div class="aviso" id="precioAviso"></div><div class="cajas" id="lista"></div></div>
 
     <div class="panel"><h3>2. Tus datos</h3>
       <div class="campos">
         <label>Nombre<input name="nombre" required autocomplete="name"></label>
         <label>WhatsApp<input name="whatsapp" type="tel" required autocomplete="tel"></label>
         <label>Correo<input name="email" type="email" required autocomplete="email"></label>
-        <label>Dirección de entrega<input name="direccion" required autocomplete="street-address"></label>
-        <label class="full">Notas (opcional)<textarea name="notas" placeholder="Alergias, tarjeta de regalo, indicaciones…"></textarea></label>
+        <label>Municipio<select name="municipio" id="muni" required><option value="">Selecciona…</option><option>Bello</option><option>Medellín</option><option>Envigado</option><option>Itagüí</option><option>Sabaneta</option><option>La Estrella</option></select></label>
+        <label><span id="dirLbl">Dirección de entrega</span><input name="direccion" id="dir" required autocomplete="street-address"></label>
+        <p class="aviso full" style="margin:0">El envío no está incluido en el precio. Entregamos personalmente en Medellín y Envigado; en los demás municipios acordamos un punto de encuentro en una estación del metro.</p>
+        <label class="full">Notas (opcional)<textarea name="notas" placeholder="Alergias, indicaciones de entrega…"></textarea></label>
+        <label class="full"><span class="chk"><input type="checkbox" id="cartaChk">Quiero agregar una mini carta escrita a mano (sin costo)</span><textarea name="carta" id="carta" maxlength="300" hidden placeholder="Escribe el mensaje y para quién es"></textarea></label>
       </div></div>
 
     <div class="panel"><h3>3. ¿Cuándo quieres recibirlo?</h3>
-      <p class="sub" style="margin-bottom:10px">Toca el primer y el último día del rango en el que puedes recibir tu pedido.</p>
+      <p class="sub" style="margin-bottom:10px">Entregamos los jueves, viernes y sábados. Toca el primer y el último día del rango en el que puedes recibir tu pedido.</p><div class="aviso" id="disp"></div>
       <div class="cal-head"><button type="button" id="prev" aria-label="Mes anterior">‹</button><b id="mes"></b><button type="button" id="next" aria-label="Mes siguiente">›</button></div>
       <div class="cal" id="cal"></div>
       <p id="rangoTxt" style="margin:10px 0 0;font-weight:600">Aún no has elegido fechas</p></div>
@@ -144,31 +151,43 @@ const PRODUCTOS=[
  {id:'c6',nombre:'Caja 6',desc:'6 trufas de chocolate y maní',precio:15000},
  {id:'bolsa',nombre:'Bolsa de galletas',desc:'10 galletas de mantequilla y maní',precio:12000}
 ];
-// Rango de fechas permitido para entrega (ajústalo a tu gusto)
-const MIN=new Date(2026,10,23), MAX=new Date(2026,11,24);
+// ---- Reglas del negocio (ajústalas aquí) ----
+const INICIO=new Date(2026,10,20);   // primera entrega
+const MAX=new Date(2026,11,24);      // última entrega
+const SUBE=new Date(2026,11,1);      // desde esta fecha los precios suben 20%
+const hoyStr=new Date().toLocaleDateString('en-CA',{timeZone:'America/Bogota'});
+const [hy,hm,hd]=hoyStr.split('-').map(Number), HOY=new Date(hy,hm-1,hd);
+const PREVENTA=HOY<SUBE;
+const redondea=n=>Math.ceil(n*1.2/500)*500;
+const precio=p=>PREVENTA?p.precio:redondea(p.precio);
+const resta=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()-n);
+// Entregas: jueves, viernes y sábado. Se pide a más tardar el sábado anterior al jueves de esa semana.
+const limitePedido=d=>resta(d,d.getDay()-4+5);
+const disponible=d=>d.getDay()>=4&&d>=INICIO&&d<=MAX&&HOY<=limitePedido(d);
+let PRIMERA=null;for(let d=new Date(INICIO);d<=MAX&&!PRIMERA;d=resta(d,-1))if(disponible(d))PRIMERA=d;
 
 const $=s=>document.querySelector(s), cop=n=>'$'+n.toLocaleString('es-CO'), qty={};
 const lista=$('#lista');
 PRODUCTOS.forEach(p=>{qty[p.id]=0;
  const d=document.createElement('div');d.className='caja'+(p.dest?' destacada':'');
- d.innerHTML=`<div><h3>${p.nombre}</h3><small>${p.desc}</small></div><div class="precio">${cop(p.precio)}</div>
+ d.innerHTML=`<div><h3>${p.nombre}</h3><small>${p.desc}</small></div><div class="precio">${cop(precio(p))}${PREVENTA?`<small>desde 1 dic: ${cop(redondea(p.precio))}</small>`:''}</div>
  <div class="qty"><button type="button" data-id="${p.id}" data-d="-1" aria-label="Quitar">−</button><span id="q-${p.id}">0</span><button type="button" data-id="${p.id}" data-d="1" aria-label="Agregar">+</button></div>`;
  lista.appendChild(d)});
 lista.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
  const id=b.dataset.id;qty[id]=Math.max(0,Math.min(20,qty[id]+ +b.dataset.d));$('#q-'+id).textContent=qty[id];resumen()});
-function resumen(){const sel=PRODUCTOS.filter(p=>qty[p.id]);const t=sel.reduce((a,p)=>a+p.precio*qty[p.id],0);
- $('#res').innerHTML=sel.length?sel.map(p=>`<li><span>${qty[p.id]} × ${p.nombre}</span><span>${cop(p.precio*qty[p.id])}</span></li>`).join(''):'<li>Aún no has agregado nada</li>';
+function resumen(){const sel=PRODUCTOS.filter(p=>qty[p.id]);const t=sel.reduce((a,p)=>a+precio(p)*qty[p.id],0);
+ $('#res').innerHTML=sel.length?sel.map(p=>`<li><span>${qty[p.id]} × ${p.nombre}</span><span>${cop(precio(p)*qty[p.id])}</span></li>`).join(''):'<li>Aún no has agregado nada</li>';
  $('#tot').textContent=cop(t);return t}
 
 // Calendario de rango
-let vista=new Date(MIN.getFullYear(),MIN.getMonth(),1),a=null,b=null;
+const base=PRIMERA||INICIO;let vista=new Date(base.getFullYear(),base.getMonth(),1),a=null,b=null;
 const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const fmt=d=>d.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});
 function dibujar(){const y=vista.getFullYear(),m=vista.getMonth();$('#mes').textContent=MESES[m]+' '+y;
  let h=['L','M','M','J','V','S','D'].map(x=>`<div class="d">${x}</div>`).join('');
  const off=(new Date(y,m,1).getDay()+6)%7;h+='<span></span>'.repeat(off);
- for(let i=1;i<=new Date(y,m+1,0).getDate();i++){const d=new Date(y,m,i),off=d<MIN||d>MAX;
-  let c='';if(a&&+d===+a||b&&+d===+b)c='borde';else if(a&&b&&d>a&&d<b)c='rango';
+ for(let i=1;i<=new Date(y,m+1,0).getDate();i++){const d=new Date(y,m,i),off=!disponible(d);
+  let c='';if(a&&+d===+a||b&&+d===+b)c='borde';else if(a&&b&&d>a&&d<b&&!off)c='rango';
   h+=`<button type="button" class="${c}" data-t="${+d}" ${off?'disabled':''}>${i}</button>`}
  $('#cal').innerHTML=h;
  $('#rangoTxt').textContent=a&&b?`Entre el ${fmt(a)} y el ${fmt(b)}`:a?`Desde el ${fmt(a)} — elige el último día`:'Aún no has elegido fechas'}
@@ -177,6 +196,13 @@ $('#cal').addEventListener('click',e=>{const t=e.target.closest('button');if(!t)
 $('#prev').onclick=()=>{vista=new Date(vista.getFullYear(),vista.getMonth()-1,1);dibujar()};
 $('#next').onclick=()=>{vista=new Date(vista.getFullYear(),vista.getMonth()+1,1);dibujar()};
 dibujar();resumen();
+$('#precioAviso').innerHTML=PREVENTA?'<b>Preventa:</b> precios especiales hasta el 30 de noviembre. Desde el 1 de diciembre los pedidos tienen un incremento del 20%. Puedes agregar una mini carta escrita a mano.':'Desde el 1 de diciembre los precios tienen un incremento del 20%. La mini carta escrita a mano sigue incluida.';
+if(PRIMERA)$('#disp').innerHTML=`Si pides hoy, tu primera fecha disponible es el <b>${fmt(PRIMERA)}</b>. Para recibirlo esa semana puedes pedir hasta el <b>${fmt(limitePedido(PRIMERA))}</b>.`;
+else{$('#disp').textContent='Ya cerramos los pedidos de Navidad. ¡Gracias por acompañarnos!';$('#enviar').disabled=true}
+$('#cartaChk').onchange=e=>{$('#carta').hidden=!e.target.checked};
+$('#muni').onchange=()=>{const pers=['Medellín','Envigado'].includes($('#muni').value);
+ $('#dirLbl').textContent=pers?'Dirección de entrega':'Estación del metro donde prefieres recibirlo';
+ $('#dir').placeholder=pers?'':'Ej.: Estación Itagüí (la confirmamos por WhatsApp)'};
 
 // Comprimir imagen / leer archivo en base64
 function leer(file){return new Promise((ok,no)=>{
@@ -192,11 +218,11 @@ $('#f').addEventListener('submit',async e=>{e.preventDefault();const msg=$('#msg
  const btn=$('#enviar');btn.disabled=true;btn.textContent='Enviando…';
  try{const fd=new FormData(e.target),comprobante=await leer($('#comp').files[0]);
   const r=await fetch('/api/pedido',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-   nombre:fd.get('nombre'),whatsapp:fd.get('whatsapp'),email:fd.get('email'),direccion:fd.get('direccion'),notas:fd.get('notas'),
+   nombre:fd.get('nombre'),whatsapp:fd.get('whatsapp'),email:fd.get('email'),municipio:fd.get('municipio'),direccion:fd.get('direccion'),notas:fd.get('notas'),carta:$('#cartaChk').checked?fd.get('carta'):'',preventa:PREVENTA,
    desde:fmt(a),hasta:fmt(b),total,comprobante,
    items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({nombre:p.nombre,cantidad:qty[p.id]}))})});
   if(!r.ok)throw 0;
-  show('¡Gracias! Recibimos tu precompra. Te escribiremos por WhatsApp para confirmarla.','ok');e.target.reset();Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()
+  show('¡Gracias! Recibimos tu precompra. Te escribiremos por WhatsApp para confirmarla.','ok');e.target.reset();$('#carta').hidden=true;Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()
  }catch{show('No pudimos enviar el pedido. Revisa que el comprobante pese menos de 3 MB e inténtalo de nuevo.','err')}
  btn.disabled=false;btn.textContent='Enviar precompra'});
 </script>
