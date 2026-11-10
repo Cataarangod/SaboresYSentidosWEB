@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
       <p><b>${esc(nombre)}</b><br>WhatsApp: ${esc(whatsapp)}<br>Correo: ${esc(email)}<br>Municipio: ${esc(municipio)}<br>Dirección / punto de encuentro: ${esc(direccion)}</p>
       <p>Quiere recibirlo entre <b>${esc(desde)}</b> y <b>${esc(hasta)}</b></p>
       <ul>${lista}</ul><p><b>Total: $${Number(total).toLocaleString('es-CO')}</b><br>${pago === 'mitad' ? `Pagó el 50% ($${Number(anticipo).toLocaleString('es-CO')}). <b>Saldo a cobrar en la entrega: $${Number(saldo).toLocaleString('es-CO')}</b>` : 'Pago completo'}</p>
-      <p>Notas: ${esc(notas)}</p><p><b>Mini carta:</b> ${carta ? esc(carta) : 'No'}</p><p>${preventa ? 'Precio de preventa' : 'Precio con incremento del 15%'}</p><p>El comprobante de pago va adjunto.</p>`;
+      <p>Notas: ${esc(notas)}</p><p><b>Mini carta:</b> ${carta ? esc(carta) : 'No'}</p><p>${preventa ? 'Precio de preventa (15% de descuento)' : 'Precio completo'}</p><p>El comprobante de pago va adjunto.</p>`;
 
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',

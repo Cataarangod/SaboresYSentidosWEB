@@ -21,13 +21,13 @@ img{max-width:100%;display:block}a{color:inherit}
 header{position:sticky;top:0;z-index:20;background:rgba(246,239,227,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--linea)}
 header .wrap{display:flex;align-items:center;gap:10px;height:58px}
 header img{width:38px;height:38px;border-radius:50%}
-header b{font:600 17px Fraunces,serif;color:var(--cafe);flex:1}
-.pill{font-size:14px;font-weight:700;text-decoration:none;border:1.5px solid var(--cafe);color:var(--cafe);padding:6px 14px;border-radius:99px}
-.btn{display:inline-block;background:var(--cafe);color:#fff;border:0;padding:14px 26px;border-radius:99px;font:700 16px 'Nunito Sans',sans-serif;text-decoration:none;cursor:pointer;text-align:center;transition:background .2s,transform .1s}
+header b{font:600 17px Fraunces,serif;color:var(--cafe);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{font-size:14px;font-weight:700;text-decoration:none;border:1.5px solid var(--cafe);color:var(--cafe);padding:0 16px;min-height:44px;display:inline-flex;align-items:center;border-radius:99px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;background:var(--cafe);color:#fff;border:0;padding:12px 28px;border-radius:99px;font:700 16px 'Nunito Sans',sans-serif;text-decoration:none;cursor:pointer;text-align:center;transition:background .2s,transform .1s}
 .btn:hover{background:#56280f}.btn:active{transform:scale(.98)}.btn:disabled{opacity:.5}
 .hero{display:grid;grid-template-columns:1fr 300px;gap:36px;align-items:center;padding:40px 0 34px}
 .etiq{display:inline-block;background:#e4ecc9;color:var(--oliva);font-weight:700;font-size:13px;padding:4px 12px;border-radius:99px;margin-bottom:14px}
-.hero h1{font-size:clamp(30px,6vw,44px);color:var(--cafe)}
+.hero h1{font-size:clamp(34px,8vw,54px);line-height:1.08;color:var(--cafe)}
 .hero p{margin:14px 0 22px;max-width:460px;color:#54443a}
 .hero img{width:100%;aspect-ratio:1;object-fit:cover;object-position:50% 68%;border-radius:20px;box-shadow:0 8px 24px rgba(60,35,15,.15)}
 .tira{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 18px 10px;margin:0 -18px;scrollbar-width:none}
@@ -48,10 +48,11 @@ h2.t{font-size:26px;color:var(--cafe);margin:30px 0 4px}
 .cab{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
 .cab h3{font-size:18px}
 .precio{font:600 18px Fraunces,serif;color:var(--oliva);white-space:nowrap;text-align:right}
-.precio small{display:block;font:400 12px 'Nunito Sans',sans-serif;color:var(--gris)}
-.inc{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px;flex:1;align-content:flex-start}
-.inc li{display:flex;align-items:center;gap:8px;background:var(--crema);border-radius:10px;padding:4px 10px 4px 4px;font-size:13px;line-height:1.25}
-.inc img{width:36px;height:36px;border-radius:8px;object-fit:cover;object-position:50% 70%;flex:none}
+.precio s{display:block;font:400 13px 'Nunito Sans',sans-serif;color:var(--gris)}.precio em{display:inline-block;font:700 12px 'Nunito Sans',sans-serif;font-style:normal;background:#e4ecc9;color:var(--oliva);border-radius:99px;padding:2px 10px;margin-top:3px}
+.lleva{margin:0;font-size:14px;color:var(--gris);line-height:1.4}
+.inc{list-style:none;margin:0;padding:0;display:grid;gap:8px}.destacada .inc{grid-template-columns:1fr 1fr}
+.inc li{display:flex;align-items:center;gap:12px;border:2px solid var(--c,#ddd);border-radius:14px;padding:5px 12px 5px 5px;font-size:14.5px;line-height:1.3;background:#fff}
+.inc img{width:68px;height:68px;border-radius:10px;object-fit:cover;object-position:50% 70%;flex:none}img[data-z]{cursor:zoom-in}
 .qty{display:flex;align-items:center;justify-content:flex-end;gap:12px}
 .qty button{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--cafe);background:#fff;color:var(--cafe);font-size:22px;cursor:pointer;line-height:1;padding:0}
 .qty button:active{background:var(--cafe);color:#fff}
@@ -86,19 +87,23 @@ textarea{min-height:76px;resize:vertical}textarea[hidden]{display:none}
 .banco{background:#fff;border:1px solid var(--linea);border-radius:14px;padding:14px;font-size:14.5px}
 .banco h4{margin:0 0 6px;font:600 17px Fraunces,serif;color:var(--cafe)}
 .banco .num{font-weight:700;font-size:18px;letter-spacing:.3px;margin:2px 0}
-.copiar{margin-top:8px;background:none;border:1.5px solid var(--oliva);color:var(--oliva);border-radius:99px;padding:5px 14px;font:700 13px 'Nunito Sans',sans-serif;cursor:pointer}
+.copiar{margin-top:8px;background:none;border:1.5px solid var(--oliva);color:var(--oliva);border-radius:99px;padding:0 16px;min-height:44px;font:700 13px 'Nunito Sans',sans-serif;cursor:pointer}
 #msg{padding:14px;border-radius:12px;display:none;margin-bottom:12px}
 .ok{background:#e4ecc9;display:block!important}.err{background:#f3d9d0;display:block!important}
 #enviar{width:100%;padding:16px}
 #barra{display:none;position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--cafe);color:#fff;padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -4px 16px rgba(0,0,0,.15)}
 #barra.on{display:flex}#barra small{display:block;opacity:.85;font-size:13px}#barra b{font:600 20px Fraunces,serif}
-#barra a{background:#fff;color:var(--cafe);padding:11px 22px;border-radius:99px;font-weight:700;text-decoration:none}
+#barra a{background:#fff;color:var(--cafe);padding:0 24px;min-height:48px;display:inline-flex;align-items:center;border-radius:99px;font-weight:700;text-decoration:none}
 footer{padding:28px 18px 40px;text-align:center;color:var(--gris);font-size:14.5px}
-footer a{color:var(--cafe);font-weight:700;margin:0 8px}
+footer a{color:var(--cafe);font-weight:700;display:inline-block;padding:12px 10px}
+#lb{position:fixed;inset:0;z-index:50;background:rgba(30,18,10,.88);display:flex;align-items:center;justify-content:center;padding:18px}#lb[hidden]{display:none}
+#lb figure{margin:0;text-align:center;color:#fff}#lb img{max-height:78vh;max-width:100%;border-radius:12px;margin:0 auto}#lb figcaption{margin-top:10px;font-weight:700}
+#wa{position:fixed;right:14px;bottom:18px;z-index:25;background:#1f9d55;color:#fff;font-weight:700;text-decoration:none;min-height:48px;padding:0 20px;border-radius:99px;display:flex;align-items:center;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+body.con-barra #wa{bottom:96px}
 @media(max-width:640px){
  .hero{grid-template-columns:1fr;gap:20px;padding:24px 0 20px}.hero img{aspect-ratio:16/10;border-radius:16px}
  .cajas,.campos,.bancos{grid-template-columns:1fr}.paso{padding:16px;border-radius:16px}
- .cab h3{font-size:17px}}
+ .cab h3{font-size:17px}.destacada .inc{grid-template-columns:1fr}header .pill{display:none}}
 </style>
 </head>
 <body>
@@ -116,13 +121,13 @@ footer a{color:var(--cafe);font-weight:700;margin:0 8px}
   </div>
 
   <div class="tira" aria-label="Nuestros productos">
-    <figure><img src="img/torta-navidad.jpg" alt=""><figcaption>Torta de navidad</figcaption></figure>
-    <figure><img src="img/manzana-banano.jpg" alt=""><figcaption>Torta de manzana y banano</figcaption></figure>
-    <figure><img src="img/turron.jpg" alt=""><figcaption>Turrón de chocolate</figcaption></figure>
-    <figure><img src="img/barritas.jpg" alt=""><figcaption>Barritas de avena y chocolate</figcaption></figure>
-    <figure><img src="img/galletas-dieteticas.jpg" alt=""><figcaption>Galletas dietéticas</figcaption></figure>
-    <figure><img src="img/galletas-mantequilla.jpg" alt=""><figcaption>Galletas de mantequilla y maní</figcaption></figure>
-    <figure><img src="img/trufas.jpg" alt=""><figcaption>Trufas de chocolate y maní</figcaption></figure>
+    <figure><img data-z src="img/torta-navidad.jpg" alt="Torta de navidad"><figcaption>Torta de navidad</figcaption></figure>
+    <figure><img data-z src="img/manzana-banano.jpg" alt="Torta de manzana y banano"><figcaption>Torta de manzana y banano</figcaption></figure>
+    <figure><img data-z src="img/turron.jpg" alt="Turrón de chocolate"><figcaption>Turrón de chocolate</figcaption></figure>
+    <figure><img data-z src="img/barritas.jpg" alt="Barritas de avena y chocolate"><figcaption>Barritas de avena y chocolate</figcaption></figure>
+    <figure><img data-z src="img/galletas-dieteticas.jpg" alt="Galletas dietéticas"><figcaption>Galletas dietéticas</figcaption></figure>
+    <figure><img data-z src="img/galletas-mantequilla.jpg" alt="Galletas de mantequilla y maní"><figcaption>Galletas de mantequilla y maní</figcaption></figure>
+    <figure><img data-z src="img/trufas.jpg" alt="Trufas de chocolate y maní"><figcaption>Trufas de chocolate y maní</figcaption></figure>
   </div>
 
   <h2 class="t" id="pedido">Haz tu precompra</h2>
@@ -171,14 +176,16 @@ footer a{color:var(--cafe);font-weight:700;margin:0 8px}
   </form>
 </main>
 
+<div id="lb" hidden><figure><img alt=""><figcaption></figcaption></figure></div>
+<a id="wa" href="https://wa.me/573044286946" target="_blank" rel="noopener">WhatsApp</a>
 <div id="barra"><div><small id="bn"></small><b id="bt"></b></div><a href="#datos">Continuar</a></div>
 <footer>Sabores y Sentidos Repostería · Hecho a mano con cariño<br><br>
 <a href="https://www.instagram.com/saboresysentidos_reposteria?rpxt=aWgzYWo2bXppcXRt" target="_blank" rel="noopener">Instagram</a>·<a href="https://wa.me/573044286946" target="_blank" rel="noopener">WhatsApp</a></footer>
 
 <script>
-const TN=['torta-navidad','Torta de navidad'],MB=['manzana-banano','Torta de manzana y banano'],TU=['turron','Turrón de chocolate'],
- BA=['barritas','Barritas de avena y chocolate'],GD=['galletas-dieteticas','Galletas dietéticas'],GM=['galletas-mantequilla','Galletas de mantequilla y maní'],TR=['trufas','Trufas de chocolate y maní'];
-const n=(x,t)=>[x[0],t];
+const TN=['torta-navidad','Torta de navidad','#e6a6a0'],MB=['manzana-banano','Torta de manzana y banano','#ecd58a'],TU=['turron','Turrón de chocolate','#c49a7c'],
+ BA=['barritas','Barritas de avena y chocolate','#b5cc85'],GD=['galletas-dieteticas','Galletas dietéticas','#9fcfc9'],GM=['galletas-mantequilla','Galletas de mantequilla y maní','#f0c597'],TR=['trufas','Trufas de chocolate y maní','#c8a4b8'];
+const n=(x,t)=>[x[0],t,x[2]];
 const PRODUCTOS=[
  {id:'completa',nombre:'Caja completa de Navidad',precio:75000,dest:true,inc:[TN,MB,n(TU,'Turrón de trufa'),n(BA,'2 barritas de avena y chocolate'),n(GD,'4 galletas dietéticas'),n(GM,'6 galletas de mantequilla y maní'),n(TR,'4 trufas de chocolate y maní')]},
  {id:'c1',nombre:'Caja 1',precio:30000,inc:[TN,TU]},
@@ -190,14 +197,15 @@ const PRODUCTOS=[
  {id:'bolsa',nombre:'Bolsa de galletas',precio:12000,inc:[n(GM,'10 galletas de mantequilla y maní')]}
 ];
 // ---- Reglas del negocio (ajústalas aquí) ----
+// Los precios de PRODUCTOS son los de preventa (15% de descuento). El precio completo se calcula solo.
 const INICIO=new Date(2026,10,19);  // primera entrega (jueves 19 de noviembre)
 const MAX=new Date(2026,11,23);     // última entrega
-const SUBE=new Date(2026,11,1);     // desde esta fecha los precios suben 15%
+const SUBE=new Date(2026,11,1);     // desde esta fecha termina la preventa (precio completo)
 const hoyStr=new Date().toLocaleDateString('en-CA',{timeZone:'America/Bogota'});
 const [hy,hm,hd]=hoyStr.split('-').map(Number), HOY=new Date(hy,hm-1,hd);
 const PREVENTA=HOY<SUBE;
-const redondea=v=>Math.ceil(v*115/100/500)*500;
-const precio=p=>PREVENTA?p.precio:redondea(p.precio);
+const completo=p=>Math.ceil(p.precio*100/85/500)*500;
+const precio=p=>PREVENTA?p.precio:completo(p);
 const resta=(d,k)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()-k);
 // Normal: jueves a sábado, pidiendo a más tardar el sábado anterior. Semana de Navidad: 21, 22 y 23 de dic., pedidos hasta el 16 de dic.
 const esNav=d=>d.getFullYear()===2026&&d.getMonth()===11&&d.getDate()>=21&&d.getDate()<=23;
@@ -206,24 +214,27 @@ const disponible=d=>(d.getDay()>=4||esNav(d))&&d>=INICIO&&d<=MAX&&HOY<=limitePed
 let PRIMERA=null;for(let d=new Date(INICIO);d<=MAX&&!PRIMERA;d=resta(d,-1))if(disponible(d))PRIMERA=d;
 
 const $=s=>document.querySelector(s), cop=v=>'$'+v.toLocaleString('es-CO'), qty={};
-const ths=p=>p.inc.map(i=>`<img src="img/${i[0]}.jpg" alt="">`);
+const ths=p=>p.inc.map(i=>`<img src="img/${i[0]}.jpg" alt="" style="border-color:${i[2]}">`);
+const unir=a=>a.length>1?a.slice(0,-1).join(', ')+' y '+a[a.length-1]:a[0];
+const queLleva=p=>unir(p.inc.map((i,k)=>k?i[1][0].toLowerCase()+i[1].slice(1):i[1]));
 const lista=$('#lista');
 PRODUCTOS.forEach(p=>{qty[p.id]=0;
  const d=document.createElement('article');d.className='caja'+(p.dest?' destacada':'');d.id='c-'+p.id;
- d.innerHTML=`<div class="cab"><h3>${p.nombre}</h3><div class="precio">${cop(precio(p))}${PREVENTA?`<small>desde 1 dic: ${cop(redondea(p.precio))}</small>`:''}</div></div>
- <ul class="inc">${p.inc.map(i=>`<li><img src="img/${i[0]}.jpg" alt="" loading="lazy"><span>${i[1]}</span></li>`).join('')}</ul>
+ d.innerHTML=`<div class="cab"><h3>${p.nombre}</h3><div class="precio">${cop(precio(p))}${PREVENTA?`<s>${cop(completo(p))}</s><em>Ahorras ${cop(completo(p)-p.precio)}</em>`:''}</div></div>
+ <p class="lleva">${queLleva(p)}</p>
+ <ul class="inc">${p.inc.map(i=>`<li style="--c:${i[2]}"><img data-z src="img/${i[0]}.jpg" alt="${i[1]}" loading="lazy"><span>${i[1]}</span></li>`).join('')}</ul>
  <div class="qty"><button type="button" data-id="${p.id}" data-d="-1" aria-label="Quitar">−</button><span id="q-${p.id}">0</span><button type="button" data-id="${p.id}" data-d="1" aria-label="Agregar">+</button></div>`;
  lista.appendChild(d)});
 lista.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
  const id=b.dataset.id;qty[id]=Math.max(0,Math.min(20,qty[id]+ +b.dataset.d));$('#q-'+id).textContent=qty[id];resumen()});
 const pagos=t=>{const m=document.querySelector('input[name=pago]:checked').value==='mitad';return{m,h:m?Math.round(t/2):t}};
-function resumen(){const sel=PRODUCTOS.filter(p=>qty[p.id]);const t=sel.reduce((a,p)=>a+precio(p)*qty[p.id],0),u=sel.reduce((a,p)=>a+qty[p.id],0);
+function resumen(){const sel=PRODUCTOS.filter(p=>qty[p.id]);const t=sel.reduce((a,p)=>a+precio(p)*qty[p.id],0),u=sel.reduce((a,p)=>a+qty[p.id],0),ah=PREVENTA?sel.reduce((a,p)=>a+(completo(p)-p.precio)*qty[p.id],0):0;
  PRODUCTOS.forEach(p=>$('#c-'+p.id).classList.toggle('sel',qty[p.id]>0));
  $('#res').innerHTML=sel.length?sel.map(p=>`<li><div class="th">${ths(p).join('')}</div><div class="rt"><b>${qty[p.id]} × ${p.nombre}</b><small>${p.inc.map(i=>i[1]).join(' · ')}</small></div><span class="p">${cop(precio(p)*qty[p.id])}</span></li>`).join(''):'<li class="plano"><span>Aún no has agregado nada</span></li>';
  const {m,h}=pagos(t);$('#tot').textContent=cop(h);
- $('#pagoDet').innerHTML=`<li class="plano"><span>Total del pedido</span><b>${cop(t)}</b></li>`+(m?`<li class="plano"><span>Pagas al recibir</span><b>${cop(t-h)}</b></li>`:'');
+ $('#pagoDet').innerHTML=(ah?`<li class="plano"><span>Precio completo</span><s>${cop(t+ah)}</s></li><li class="plano" style="color:var(--oliva)"><b>Descuento de preventa: ¡te ahorras!</b><b>−${cop(ah)}</b></li>`:'')+`<li class="plano"><span>Total del pedido</span><b>${cop(t)}</b></li>`+(m?`<li class="plano"><span>Pagas al recibir</span><b>${cop(t-h)}</b></li>`:'');
  $('#barra').classList.toggle('on',u>0);document.body.classList.toggle('con-barra',u>0);
- $('#bn').textContent=u+(u===1?' producto':' productos');$('#bt').textContent=cop(t);return t}
+ $('#bn').textContent=u+(u===1?' producto':' productos')+(ah?' · ahorras '+cop(ah):'');$('#bt').textContent=cop(t);return t}
 
 // Calendario de rango
 const base=PRIMERA||INICIO;let vista=new Date(base.getFullYear(),base.getMonth(),1),a=null,b=null;
@@ -243,8 +254,8 @@ $('#prev').onclick=()=>{vista=new Date(vista.getFullYear(),vista.getMonth()-1,1)
 $('#next').onclick=()=>{vista=new Date(vista.getFullYear(),vista.getMonth()+1,1);dibujar()};
 dibujar();resumen();
 document.querySelectorAll('input[name=pago]').forEach(r=>r.onchange=resumen);
-$('#precioAviso').innerHTML=PREVENTA?'<b>Preventa:</b> precios especiales hasta el 30 de noviembre. Desde el 1 de diciembre los pedidos tienen un incremento del 15%. Puedes agregar una mini carta escrita a mano.':'Desde el 1 de diciembre los precios tienen un incremento del 15%. La mini carta escrita a mano sigue incluida.';
-$('#etiq').textContent=PREVENTA?'Preventa hasta el 30 de noviembre':'Navidad 2026';
+$('#precioAviso').innerHTML=PREVENTA?'<b>Preventa con 15% de descuento</b> hasta el 30 de noviembre. Desde el 1 de diciembre aplica el precio completo. Puedes agregar una mini carta escrita a mano.':'Desde el 1 de diciembre aplica el precio completo. La mini carta escrita a mano sigue incluida.';
+$('#etiq').textContent=PREVENTA?'Preventa: 15% de descuento hasta el 30 de noviembre':'Navidad 2026';
 if(PRIMERA)$('#disp').innerHTML=`Si pides hoy, tu primera fecha disponible es el <b>${fmt(PRIMERA)}</b>. Para recibirlo esa semana puedes pedir hasta el <b>${fmt(limitePedido(PRIMERA))}</b>.`;
 else{$('#disp').textContent='Ya cerramos los pedidos de Navidad. ¡Gracias por acompañarnos!';$('#enviar').disabled=true}
 $('#cartaChk').onchange=e=>{$('#carta').hidden=!e.target.checked};
@@ -254,6 +265,13 @@ $('#muni').onchange=()=>{const pers=['Medellín','Envigado'].includes($('#muni')
 document.querySelectorAll('.copiar').forEach(btn=>btn.onclick=async()=>{const t=btn.textContent;
  try{await navigator.clipboard.writeText(btn.dataset.v);btn.textContent='¡Copiado!'}catch{btn.textContent=btn.dataset.v}
  setTimeout(()=>btn.textContent=t,1800)});
+
+// Ver fotos en grande
+const lb=$('#lb');
+document.addEventListener('click',e=>{const i=e.target.closest('img[data-z]');
+ if(i){lb.querySelector('img').src=i.src;lb.querySelector('img').alt=i.alt;lb.querySelector('figcaption').textContent=i.alt;lb.hidden=false}
+ else if(e.target.closest('#lb'))lb.hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.hidden=true});
 
 // Comprimir imagen / leer archivo en base64
 function leer(file){return new Promise((ok,no)=>{
