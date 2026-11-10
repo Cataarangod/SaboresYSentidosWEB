@@ -50,9 +50,13 @@ h2.t{font-size:26px;color:var(--cafe);margin:30px 0 4px}
 .precio{font:600 18px Fraunces,serif;color:var(--oliva);white-space:nowrap;text-align:right}
 .precio s{display:block;font:400 13px 'Nunito Sans',sans-serif;color:var(--gris)}.precio em{display:inline-block;font:700 12px 'Nunito Sans',sans-serif;font-style:normal;background:#e4ecc9;color:var(--oliva);border-radius:99px;padding:2px 10px;margin-top:3px}
 .lleva{margin:0;font-size:14px;color:var(--gris);line-height:1.4}
-.inc{list-style:none;margin:0;padding:0;display:grid;gap:8px}.destacada .inc{grid-template-columns:1fr 1fr}
-.inc li{display:flex;align-items:center;gap:12px;border:2px solid var(--c,#ddd);border-radius:14px;padding:5px 12px 5px 5px;font-size:14.5px;line-height:1.3;background:#fff}
-.inc img{width:68px;height:68px;border-radius:10px;object-fit:cover;object-position:50% 70%;flex:none}img[data-z]{cursor:zoom-in}
+.inc{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px}.inc li{position:relative;line-height:0}
+.tag{position:absolute;left:6px;bottom:6px;background:var(--cafe);color:#fff;font:700 11px 'Nunito Sans',sans-serif;line-height:1.2;padding:3px 9px;border-radius:99px}
+.ins{display:inline-block;font:700 11.5px 'Nunito Sans',sans-serif;padding:2px 10px;border-radius:99px;margin-bottom:5px}.ins.top{background:var(--cafe);color:#fff}.ins.regalo{background:#f3dfbf;color:var(--cafe)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}.chips span{border:1.5px solid var(--oliva);color:var(--oliva);font-weight:700;font-size:13px;padding:3px 12px;border-radius:99px}
+.aviso.alerg{background:#f6e0d6}
+
+.inc img{width:96px;height:96px;border-radius:14px;border:3px solid var(--c,#ddd);object-fit:cover;object-position:50% 70%}img[data-z]{cursor:zoom-in}
 .qty{display:flex;align-items:center;justify-content:flex-end;gap:12px}
 .qty button{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--cafe);background:#fff;color:var(--cafe);font-size:22px;cursor:pointer;line-height:1;padding:0}
 .qty button:active{background:var(--cafe);color:#fff}
@@ -74,9 +78,9 @@ textarea{min-height:76px;resize:vertical}textarea[hidden]{display:none}
 .cal button:not(:disabled):hover{background:#e4ecc9}
 .cal .rango{background:#e4ecc9!important}.cal .borde{background:var(--oliva)!important;color:#fff!important}
 .res{list-style:none;padding:0;margin:0 0 8px}
-.res li{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--linea)}
-.res .th{display:flex;flex:none}.res .th img{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 70%;border:2px solid var(--papel);margin-left:-10px}
-.res .th img:first-child{margin-left:0}
+.res li{display:grid;gap:4px;padding:12px 0;border-bottom:1px solid var(--linea)}
+.rl{display:flex;justify-content:space-between;gap:10px;align-items:baseline}.res .th{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.res .th img{width:40px;height:40px;border-radius:50%;object-fit:cover;object-position:50% 70%;border:3px solid var(--papel)}
+
 .res .rt{flex:1;min-width:0}.res small{display:block;color:var(--gris);font-size:12.5px;line-height:1.3}
 .res .p{font-weight:700;white-space:nowrap}
 .res li.plano{padding:6px 0;border:0;display:flex;justify-content:space-between}
@@ -103,7 +107,7 @@ body.con-barra #wa{bottom:96px}
 @media(max-width:640px){
  .hero{grid-template-columns:1fr;gap:20px;padding:24px 0 20px}.hero img{aspect-ratio:16/10;border-radius:16px}
  .cajas,.campos,.bancos{grid-template-columns:1fr}.paso{padding:16px;border-radius:16px}
- .cab h3{font-size:17px}.destacada .inc{grid-template-columns:1fr}header .pill{display:none}}
+ .cab h3{font-size:17px}header .pill{display:none}}
 </style>
 </head>
 <body>
@@ -115,13 +119,14 @@ body.con-barra #wa{bottom:96px}
       <span class="etiq" id="etiq">Navidad 2026</span>
       <h1>La magia de la Navidad se comparte en la mesa.</h1>
       <p>Presentamos nuestra Cajita Navideña Sabores y Sentidos: una selección artesanal pensada para consentir a quienes más quieres</p>
+      <div class="chips"><span>100% artesanal</span><span>Sin conservantes</span><span>Bajo en azúcar</span></div>
       <a class="btn" href="#pedido">Hacer mi pedido</a>
     </div>
     <img src="img/caja.jpg" alt="Caja navideña con lazo verde">
   </div>
 
   <div class="tira" aria-label="Nuestros productos">
-    <figure><img data-z src="img/torta-navidad.jpg" alt="Torta de navidad"><figcaption>Torta de navidad</figcaption></figure>
+    <figure><img data-z src="img/torta-navidad.jpg" alt="Torta de navidad envinada"><figcaption>Torta de navidad envinada</figcaption></figure>
     <figure><img data-z src="img/manzana-banano.jpg" alt="Torta de manzana y banano"><figcaption>Torta de manzana y banano</figcaption></figure>
     <figure><img data-z src="img/turron.jpg" alt="Turrón de chocolate"><figcaption>Turrón de chocolate</figcaption></figure>
     <figure><img data-z src="img/barritas.jpg" alt="Barritas de avena y chocolate"><figcaption>Barritas de avena y chocolate</figcaption></figure>
@@ -136,6 +141,8 @@ body.con-barra #wa{bottom:96px}
   <form id="f">
     <div class="paso"><h3><i>1</i>Escoge tus cajas</h3>
       <div class="aviso" id="precioAviso"></div>
+      <div class="aviso alerg"><b>Importante:</b> todos nuestros productos contienen frutos secos, como maní. Si eres alérgico, abstente de consumirlos.</div>
+      <p class="sub" style="margin:0 0 12px">Toca una foto para verla en grande.</p>
       <div class="cajas" id="lista"></div></div>
 
     <div class="paso" id="datos"><h3><i>2</i>Tus datos</h3>
@@ -170,6 +177,7 @@ body.con-barra #wa{bottom:96px}
       </div>
       <label>Sube tu comprobante (foto o PDF)<input type="file" id="comp" accept="image/*,.pdf" required></label></div>
 
+    <label class="chk" style="margin:0 0 14px"><input type="checkbox" required>Entiendo que todos los productos contienen frutos secos, como maní.</label>
     <div id="msg"></div>
     <button class="btn" id="enviar" type="submit">Enviar precompra</button>
     <p class="sub" style="text-align:center;margin-top:12px">¿Dudas con tu pedido? <a href="https://wa.me/573044286946" target="_blank" rel="noopener" style="font-weight:700;color:var(--cafe)">Escríbenos al WhatsApp 304 428 6946</a></p>
@@ -183,18 +191,18 @@ body.con-barra #wa{bottom:96px}
 <a href="https://www.instagram.com/saboresysentidos_reposteria?rpxt=aWgzYWo2bXppcXRt" target="_blank" rel="noopener">Instagram</a>·<a href="https://wa.me/573044286946" target="_blank" rel="noopener">WhatsApp</a></footer>
 
 <script>
-const TN=['torta-navidad','Torta de navidad','#e6a6a0'],MB=['manzana-banano','Torta de manzana y banano','#ecd58a'],TU=['turron','Turrón de chocolate','#c49a7c'],
+const TN=['torta-navidad','Torta de navidad envinada','#e6a6a0','Envinada'],MB=['manzana-banano','Torta de manzana y banano','#ecd58a'],TU=['turron','Turrón de chocolate','#c49a7c'],
  BA=['barritas','Barritas de avena y chocolate','#b5cc85'],GD=['galletas-dieteticas','Galletas dietéticas','#9fcfc9'],GM=['galletas-mantequilla','Galletas de mantequilla y maní','#f0c597'],TR=['trufas','Trufas de chocolate y maní','#c8a4b8'];
-const n=(x,t)=>[x[0],t,x[2]];
+const n=(x,t)=>[x[0],t,x[2],x[3]];
 const PRODUCTOS=[
- {id:'completa',nombre:'Caja completa de Navidad',precio:75000,dest:true,inc:[TN,MB,n(TU,'Turrón de trufa'),n(BA,'2 barritas de avena y chocolate'),n(GD,'4 galletas dietéticas'),n(GM,'6 galletas de mantequilla y maní'),n(TR,'4 trufas de chocolate y maní')]},
- {id:'c1',nombre:'Caja 1',precio:30000,inc:[TN,TU]},
- {id:'c2',nombre:'Caja 2',precio:25000,inc:[TU,BA]},
- {id:'c3',nombre:'Caja 3',precio:25000,inc:[TN,BA]},
+ {id:'completa',nombre:'Caja completa de Navidad',precio:75000,dest:true,badge:'top',inc:[TN,MB,n(TU,'Turrón de trufa'),n(BA,'2 barritas de avena y chocolate'),n(GD,'4 galletas dietéticas'),n(GM,'6 galletas de mantequilla y maní'),n(TR,'4 trufas de chocolate y maní')]},
+ {id:'c1',nombre:'Caja 1',precio:30000,badge:'top',inc:[TN,TU]},
+ {id:'c2',nombre:'Caja 2',precio:25000,inc:[TU,n(BA,'2 barritas de avena y chocolate')]},
+ {id:'c3',nombre:'Caja 3',precio:25000,inc:[TN,n(BA,'2 barritas de avena y chocolate')]},
  {id:'c4',nombre:'Caja 4',precio:20000,inc:[GD,MB]},
- {id:'c5',nombre:'Caja 5',precio:10000,inc:[n(TR,'4 trufas de chocolate y maní')]},
+ {id:'c5',nombre:'Caja 5',precio:10000,badge:'regalo',inc:[n(TR,'4 trufas de chocolate y maní')]},
  {id:'c6',nombre:'Caja 6',precio:15000,inc:[n(TR,'6 trufas de chocolate y maní')]},
- {id:'bolsa',nombre:'Bolsa de galletas',precio:12000,inc:[n(GM,'10 galletas de mantequilla y maní')]}
+ {id:'bolsa',nombre:'Bolsa de galletas',precio:12000,badge:'regalo',inc:[n(GM,'10 galletas de mantequilla y maní')]}
 ];
 // ---- Reglas del negocio (ajústalas aquí) ----
 // Los precios de PRODUCTOS son los de preventa (15% de descuento). El precio completo se calcula solo.
@@ -220,9 +228,9 @@ const queLleva=p=>unir(p.inc.map((i,k)=>k?i[1][0].toLowerCase()+i[1].slice(1):i[
 const lista=$('#lista');
 PRODUCTOS.forEach(p=>{qty[p.id]=0;
  const d=document.createElement('article');d.className='caja'+(p.dest?' destacada':'');d.id='c-'+p.id;
- d.innerHTML=`<div class="cab"><h3>${p.nombre}</h3><div class="precio">${cop(precio(p))}${PREVENTA?`<s>${cop(completo(p))}</s><em>Ahorras ${cop(completo(p)-p.precio)}</em>`:''}</div></div>
+ d.innerHTML=`<div class="cab"><div>${p.badge?`<span class="ins ${p.badge}">${p.badge==='top'?'★ Top seller':'Mejor para regalar en cantidad'}</span>`:''}<h3>${p.nombre}</h3></div><div class="precio">${cop(precio(p))}${PREVENTA?`<s>${cop(completo(p))}</s><em>Ahorras ${cop(completo(p)-p.precio)}</em>`:''}</div></div>
  <p class="lleva">${queLleva(p)}</p>
- <ul class="inc">${p.inc.map(i=>`<li style="--c:${i[2]}"><img data-z src="img/${i[0]}.jpg" alt="${i[1]}" loading="lazy"><span>${i[1]}</span></li>`).join('')}</ul>
+ <ul class="inc">${p.inc.map(i=>`<li style="--c:${i[2]}"><img data-z src="img/${i[0]}.jpg" alt="${i[1]}" loading="lazy">${i[3]?`<span class="tag">${i[3]}</span>`:''}</li>`).join('')}</ul>
  <div class="qty"><button type="button" data-id="${p.id}" data-d="-1" aria-label="Quitar">−</button><span id="q-${p.id}">0</span><button type="button" data-id="${p.id}" data-d="1" aria-label="Agregar">+</button></div>`;
  lista.appendChild(d)});
 lista.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
@@ -230,7 +238,7 @@ lista.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)retu
 const pagos=t=>{const m=document.querySelector('input[name=pago]:checked').value==='mitad';return{m,h:m?Math.round(t/2):t}};
 function resumen(){const sel=PRODUCTOS.filter(p=>qty[p.id]);const t=sel.reduce((a,p)=>a+precio(p)*qty[p.id],0),u=sel.reduce((a,p)=>a+qty[p.id],0),ah=PREVENTA?sel.reduce((a,p)=>a+(completo(p)-p.precio)*qty[p.id],0):0;
  PRODUCTOS.forEach(p=>$('#c-'+p.id).classList.toggle('sel',qty[p.id]>0));
- $('#res').innerHTML=sel.length?sel.map(p=>`<li><div class="th">${ths(p).join('')}</div><div class="rt"><b>${qty[p.id]} × ${p.nombre}</b><small>${p.inc.map(i=>i[1]).join(' · ')}</small></div><span class="p">${cop(precio(p)*qty[p.id])}</span></li>`).join(''):'<li class="plano"><span>Aún no has agregado nada</span></li>';
+ $('#res').innerHTML=sel.length?sel.map(p=>`<li><div class="rl"><b>${qty[p.id]} × ${p.nombre}</b><span class="p">${cop(precio(p)*qty[p.id])}</span></div><small>${queLleva(p)}</small><div class="th">${ths(p).join('')}</div></li>`).join(''):'<li class="plano"><span>Aún no has agregado nada</span></li>';
  const {m,h}=pagos(t);$('#tot').textContent=cop(h);
  $('#pagoDet').innerHTML=(ah?`<li class="plano"><span>Precio completo</span><s>${cop(t+ah)}</s></li><li class="plano" style="color:var(--oliva)"><b>Descuento de preventa: ¡te ahorras!</b><b>−${cop(ah)}</b></li>`:'')+`<li class="plano"><span>Total del pedido</span><b>${cop(t)}</b></li>`+(m?`<li class="plano"><span>Pagas al recibir</span><b>${cop(t-h)}</b></li>`:'');
  $('#barra').classList.toggle('on',u>0);document.body.classList.toggle('con-barra',u>0);
