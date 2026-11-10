@@ -175,7 +175,8 @@ body.con-barra #wa{bottom:96px}
         <div class="banco"><h4>Bancolombia · Ahorros</h4><div class="num">377 235 302 11</div>Catalina Arango S<br>Documento 1000638024<br><button type="button" class="copiar" data-v="37723530211">Copiar número</button></div>
         <div class="banco"><h4>Nequi</h4><div class="num">319 422 5017</div>Llave Nequi<br><button type="button" class="copiar" data-v="3194225017">Copiar llave</button></div>
       </div>
-      <label>Sube tu comprobante (foto o PDF)<input type="file" id="comp" accept="image/*,.pdf" required></label></div>
+      <label>Sube tu comprobante<input type="file" id="comp" accept="image/*,.pdf" required></label>
+      <p class="sub" id="compEst" style="margin:6px 0 0">Puede ser una captura de pantalla, una foto o un PDF.</p></div>
 
     <label class="chk" style="margin:0 0 14px"><input type="checkbox" required>Entiendo que todos los productos contienen frutos secos, como maní.</label>
     <div id="msg"></div>
@@ -282,25 +283,38 @@ document.addEventListener('click',e=>{const i=e.target.closest('img[data-z]');
 document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.hidden=true});
 
 // Comprimir imagen / leer archivo en base64
-function leer(file){return new Promise((ok,no)=>{
- if(file.type.startsWith('image/')){const img=new Image();img.onload=()=>{const s=Math.min(1,1600/Math.max(img.width,img.height)),c=document.createElement('canvas');
-  c.width=img.width*s;c.height=img.height*s;c.getContext('2d').drawImage(img,0,0,c.width,c.height);ok({filename:'comprobante.jpg',content:c.toDataURL('image/jpeg',.8).split(',')[1]})};
-  img.onerror=no;img.src=URL.createObjectURL(file)}
- else{if(file.size>3e6)return no(new Error('big'));const r=new FileReader();r.onload=()=>ok({filename:file.name,content:r.result.split(',')[1]});r.onerror=no;r.readAsDataURL(file)}})}
+async function leer(file){
+ const esImg=file.type.startsWith('image/')||/\.(heic|heif|jpe?g|png|webp)$/i.test(file.name);
+ if(esImg){
+  try{const bmp=await createImageBitmap(file);let max=1600,q=.8,out;
+   for(let k=0;k<6;k++){const s=Math.min(1,max/Math.max(bmp.width,bmp.height)),c=document.createElement('canvas');
+    c.width=Math.round(bmp.width*s);c.height=Math.round(bmp.height*s);c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+    out=c.toDataURL('image/jpeg',q);if(out.length<1.2e6)break;max*=.8;q-=.07}
+   bmp.close&&bmp.close();return{filename:'comprobante.jpg',content:out.split(',')[1]}}
+  catch{/* formato que el navegador no puede leer (p. ej. HEIC): se envía tal cual si es liviano */}
+ }
+ if(file.size>3e6)throw new Error('grande');
+ return new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok({filename:file.name,content:r.result.split(',')[1]});r.onerror=no;r.readAsDataURL(file)})}
+let compP=null;
+const comp=()=>{const f=$('#comp').files[0];if(!f)throw new Error('falta');return compP||(compP=leer(f))};
+$('#comp').onchange=async()=>{compP=null;const est=$('#compEst'),f=$('#comp').files[0];if(!f){est.textContent='';return}
+ est.textContent='Preparando…';
+ try{const c=await comp();est.textContent='Listo ✓ ('+Math.round(c.content.length*.75/1024)+' KB)'}
+ catch(err){compP=null;$('#comp').value='';est.textContent=err.message==='grande'?'Este archivo pesa demasiado. Súbelo como foto o captura de pantalla.':'No pudimos leer este archivo. Prueba con una captura de pantalla.'}};
 
 $('#f').addEventListener('submit',async e=>{e.preventDefault();const msg=$('#msg');msg.className='';msg.style.display='none';
  const total=resumen(),{m,h}=pagos(total);const show=(t,c)=>{msg.textContent=t;msg.className=c;msg.scrollIntoView({block:'center'})};
  if(!total)return show('Agrega al menos un producto.','err');
  if(!a||!b)return show('Elige el rango de fechas en el calendario.','err');
  const btn=$('#enviar');btn.disabled=true;btn.textContent='Enviando…';
- try{const fd=new FormData(e.target),comprobante=await leer($('#comp').files[0]);
+ try{const fd=new FormData(e.target),comprobante=await comp();
   const r=await fetch('/api/pedido',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
    nombre:fd.get('nombre'),whatsapp:fd.get('whatsapp'),email:fd.get('email'),municipio:fd.get('municipio'),direccion:fd.get('direccion'),notas:fd.get('notas'),carta:$('#cartaChk').checked?fd.get('carta'):'',preventa:PREVENTA,
    desde:fmt(a),hasta:fmt(b),total,pago:m?'mitad':'completo',anticipo:h,saldo:total-h,comprobante,
    items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({id:p.id,nombre:p.nombre,cantidad:qty[p.id]}))})});
-  if(!r.ok)throw 0;const j=await r.json().catch(()=>({}));
-  show('¡Gracias! Recibimos tu precompra'+(j.id?' (pedido #'+j.id+')':'')+'. Te escribiremos por WhatsApp para confirmarla.','ok');e.target.reset();$('#carta').hidden=true;Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()
- }catch{show('No pudimos enviar el pedido. Revisa que el comprobante pese menos de 3 MB e inténtalo de nuevo.','err')}
+  if(r.status===413)throw new Error('grande');if(!r.ok)throw 0;const j=await r.json().catch(()=>({}));
+  show('¡Gracias! Recibimos tu precompra'+(j.id?' (pedido #'+j.id+')':'')+'. Te escribiremos por WhatsApp para confirmarla.','ok');e.target.reset();compP=null;$('#compEst').textContent='';$('#carta').hidden=true;Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()
+ }catch(err){compP=null;show(err.message==='grande'?'El comprobante pesa demasiado. Súbelo como foto o captura de pantalla y lo ajustamos solos.':'No pudimos enviar el pedido. Inténtalo de nuevo y, si sigue fallando, escríbenos por WhatsApp.','err')}
  btn.disabled=false;btn.textContent='Enviar precompra'});
 </script>
 </body>

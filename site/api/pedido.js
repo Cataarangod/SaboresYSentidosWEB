@@ -3,8 +3,7 @@
 const crypto = require('crypto');
 const { calcular } = require('./_catalogo');
 
-const SB = process.env.SUPABASE_URL, KEY = process.env.SUPABASE_SERVICE_KEY;
-const sb = (path, opts = {}) => fetch(SB + path, { ...opts, headers: { apikey: KEY, Authorization: `Bearer ${KEY}`, ...opts.headers } });
+const { SB, KEY, sb } = require('./_sb');
 const esc = (s = '') => String(s).replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
 const cop = n => '$' + Number(n).toLocaleString('es-CO');
 
@@ -24,10 +23,11 @@ module.exports = async (req, res) => {
     // 1) Base de datos + comprobante
     if (SB && KEY) {
       try {
-        const esPdf = /\.pdf$/i.test(comprobante.filename || '');
-        const path = `${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}.${esPdf ? 'pdf' : 'jpg'}`;
+        const ext = ((comprobante.filename || '').match(/\.(pdf|png|webp|heic|heif|jpe?g)$/i) || [, 'jpg'])[1].toLowerCase();
+        const MIME = { pdf: 'application/pdf', png: 'image/png', webp: 'image/webp', heic: 'image/heic', heif: 'image/heif' };
+        const path = `${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}.${ext}`;
         const up = await sb(`/storage/v1/object/comprobantes/${path}`, {
-          method: 'POST', headers: { 'Content-Type': esPdf ? 'application/pdf' : 'image/jpeg' },
+          method: 'POST', headers: { 'Content-Type': MIME[ext] || 'image/jpeg' },
           body: Buffer.from(comprobante.content, 'base64'),
         });
         if (up.ok) {
@@ -71,6 +71,22 @@ module.exports = async (req, res) => {
         });
         mailOk = r.ok;
       } catch (e) { console.error('Mail', e); }
+    }
+
+    // 3) Confirmación al cliente (solo si PEDIDOS_FROM es una dirección de un dominio verificado en Resend)
+    if (process.env.RESEND_API_KEY && process.env.PEDIDOS_FROM && email) {
+      try {
+        await fetch('https://api.resend.com/emails', {
+          method: 'POST', headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            from: process.env.PEDIDOS_FROM, to: [email], subject: `Recibimos tu pedido de Navidad${id ? ' #' + id : ''}`,
+            html: `<p>Hola ${esc(nombre)}, ¡gracias por tu precompra en Sabores y Sentidos!</p>
+              <ul>${lineas.map(l => `<li>${l.cantidad} × ${esc(l.nombre)}</li>`).join('')}</ul>
+              <p><b>Total: ${cop(total)}</b><br>${mitad ? `Pagaste ${cop(anticipo)}. Saldo a pagar al recibir: <b>${cop(saldo)}</b>` : 'Pago completo'}</p>
+              <p>Entrega entre ${esc(desde)} y ${esc(hasta)}. Te escribiremos por WhatsApp para confirmar los detalles. Dudas: 304 428 6946.</p>`,
+          }),
+        });
+      } catch (e) { console.error('Confirmación', e); }
     }
 
     if (!dbOk && !mailOk) return res.status(502).json({ error: 'No se pudo guardar el pedido' });
