@@ -114,6 +114,8 @@ body.con-barra #wa{bottom:96px}
 .okt{display:flex;justify-content:space-between;font:600 20px Fraunces,serif;color:var(--cafe);margin:8px 0 4px}
 .oks{font-size:14px;color:var(--gris);text-align:left;margin:4px 0}
 .okf{background:#e4ecc9;border-radius:12px;padding:10px;font-weight:700;margin:16px 0 14px!important}
+.okr{background:#fbf0dd;border-radius:12px;padding:10px 12px;margin:14px 0;font-size:13.5px;text-align:left;color:#5b4a3d}.okr p{margin:0 0 6px!important}.okr p:last-child{margin:0!important}
+.btn.sec{background:none;color:var(--cafe);border:1.5px solid var(--cafe)}.btn.sec:hover{background:#efe4d0}
 @media(max-width:640px){
  .hero{grid-template-columns:1fr;gap:20px;padding:24px 0 20px}.hero img{aspect-ratio:16/10;border-radius:16px}
  .cajas,.campos,.bancos{grid-template-columns:1fr}.paso{padding:16px;border-radius:16px}
@@ -147,6 +149,7 @@ body.con-barra #wa{bottom:96px}
 
   <h2 class="t" id="pedido">Haz tu precompra</h2>
   <p class="sub">Elige tus cajas, cuéntanos cuándo las quieres y sube el comprobante de tu pago.</p>
+  <p class="aviso">Recuerda que este es un proceso de precompra, y solo se confirma a través de WhatsApp para poder comprobar la información del pedido 🤍</p>
 
   <form id="f">
     <div class="paso"><h3><i>1</i>Escoge tus cajas</h3>
@@ -162,7 +165,7 @@ body.con-barra #wa{bottom:96px}
         <label class="full">Correo<input name="email" type="email" required autocomplete="email"></label>
         <label>Municipio<select name="municipio" id="muni" required><option value="">Selecciona…</option><option>Bello</option><option>Medellín</option><option>Envigado</option><option>Itagüí</option><option>Sabaneta</option><option>La Estrella</option></select></label>
         <label><span id="dirLbl">Dirección de entrega</span><input name="direccion" id="dir" required autocomplete="street-address"></label>
-        <p class="aviso full" style="margin:0">El envío no está incluido en el precio. Entregamos personalmente en Medellín y Envigado; en los demás municipios acordamos un punto de encuentro en una estación del metro.</p>
+        <p class="aviso full" style="margin:0">El envío no está incluido en el precio. Entregamos personalmente en Medellín y Envigado; en los demás municipios acordamos un punto de encuentro en una estación del metro. El valor del envío se define al confirmar tu pedido por WhatsApp.</p>
         <label class="full">Notas (opcional)<textarea name="notas" placeholder="Alergias, indicaciones de entrega…"></textarea></label>
         <label class="full"><span class="chk"><input type="checkbox" id="cartaChk">Quiero agregar una mini carta escrita a mano (sin costo)</span><textarea name="carta" id="carta" maxlength="300" hidden placeholder="Escribe el mensaje y para quién es"></textarea></label>
       </div></div>
@@ -179,6 +182,7 @@ body.con-barra #wa{bottom:96px}
       <div class="opc">
         <label class="chk"><input type="radio" name="pago" value="completo" checked>Pago completo ahora</label>
         <label class="chk"><input type="radio" name="pago" value="mitad">Pago el 50% ahora y el resto al recibir mi pedido</label></div>
+      <p class="aviso alerg" id="avisoMitad" hidden><b>Importante:</b> si el pedido no se paga en su totalidad al momento de la entrega, no se entrega y el 50% pagado no se reembolsa.</p>
       <ul class="res" id="pagoDet"></ul>
       <div class="total"><span>Total a pagar hoy</span><span id="tot">$0</span></div>
       <div class="bancos">
@@ -203,12 +207,12 @@ body.con-barra #wa{bottom:96px}
 
 <div id="okp" hidden><div class="okc" role="dialog" aria-modal="true" aria-label="Pedido recibido">
   <img src="img/logo.png" alt="">
-  <div class="chk2">✓</div><h2>¡Gracias!</h2>
+  <div class="chk2">✓</div><h2 id="okH">¡Gracias!</h2>
   <div class="okn" id="okNum"></div>
   <p>Recibimos tu precompra. Te escribiremos por WhatsApp para confirmarla.</p>
   <div id="okRes"></div>
-  <p class="okf">Guarda este pantallazo</p>
-  <button type="button" class="btn" id="okCerrar" style="width:100%">Listo</button>
+  <button type="button" class="btn" id="okDesc" style="width:100%;margin:14px 0 10px">Descargar mi pedido</button>
+  <button type="button" class="btn sec" id="okCerrar" style="width:100%">Cerrar</button>
 </div></div>
 <script>
 const TN=['torta-navidad','Torta de navidad envinada','#e6a6a0','Envinada'],MB=['manzana-banano','Torta de manzana y banano','#ecd58a'],TU=['turron','Turrón de chocolate','#c49a7c'],
@@ -259,7 +263,7 @@ const pagos=t=>{const m=document.querySelector('input[name=pago]:checked').value
 function resumen(){const sel=PRODUCTOS.filter(p=>qty[p.id]);const t=sel.reduce((a,p)=>a+precio(p)*qty[p.id],0),u=sel.reduce((a,p)=>a+qty[p.id],0),ah=PREVENTA?sel.reduce((a,p)=>a+(completo(p)-p.precio)*qty[p.id],0):0;
  PRODUCTOS.forEach(p=>$('#c-'+p.id).classList.toggle('sel',qty[p.id]>0));
  $('#res').innerHTML=sel.length?sel.map(p=>`<li><div class="rl"><b>${qty[p.id]} × ${p.nombre}</b><span class="p">${cop(precio(p)*qty[p.id])}</span></div><small>${queLleva(p)}</small><div class="th">${ths(p).join('')}</div></li>`).join(''):'<li class="plano"><span>Aún no has agregado nada</span></li>';
- const {m,h}=pagos(t);$('#tot').textContent=cop(h);
+ const {m,h}=pagos(t);$('#avisoMitad').hidden=!m;$('#tot').textContent=cop(h);
  $('#pagoDet').innerHTML=(ah?`<li class="plano"><span>Precio completo</span><s>${cop(t+ah)}</s></li><li class="plano" style="color:var(--oliva)"><b>Descuento de preventa: ¡te ahorras!</b><b>−${cop(ah)}</b></li>`:'')+`<li class="plano"><span>Total del pedido</span><b>${cop(t)}</b></li>`+(m?`<li class="plano"><span>Pagas al recibir</span><b>${cop(t-h)}</b></li>`:'');
  $('#barra').classList.toggle('on',u>0);document.body.classList.toggle('con-barra',u>0);
  $('#bn').textContent=u+(u===1?' producto':' productos')+(ah?' · ahorras '+cop(ah):'');$('#bt').textContent=cop(t);return t}
@@ -322,13 +326,52 @@ $('#comp').onchange=async()=>{compP=null;const est=$('#compEst'),f=$('#comp').fi
  catch(err){compP=null;$('#comp').value='';est.textContent=err.message==='grande'?'Este archivo pesa demasiado. Súbelo como foto o captura de pantalla.':'No pudimos leer este archivo. Prueba con una captura de pantalla.'}};
 
 const E=t=>String(t||'').replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+let lastOk=null;
+const primer=n=>{const w=String(n||'').trim().split(/\s+/)[0]||'';return w?w[0].toUpperCase()+w.slice(1).toLowerCase():''};
+const RECS=m=>['Tu precompra solo queda confirmada cuando el pago, total o parcial, está hecho.','El valor del envío se define al confirmar por WhatsApp.'].concat(m?['Si el pedido no se paga en su totalidad al momento de la entrega, no se entrega y el 50% pagado no se reembolsa.']:[]);
 function mostrarOk(o){
+ lastOk=o;$('#okH').textContent='¡Gracias'+(primer(o.nombre)?', '+primer(o.nombre):'')+'!';
  $('#okNum').textContent=o.id?'Pedido #'+o.id:'';
  $('#okRes').innerHTML=`<ul class="okl">${o.items.map(i=>`<li><span>${i.q} × ${E(i.n)}</span><b>${cop(i.s)}</b></li>`).join('')}</ul>
   <div class="okt"><span>Total</span><span>${cop(o.total)}</span></div>
   <div class="oks">${o.m?`Pagaste hoy <b>${cop(o.h)}</b> · Pagas al recibir <b>${cop(o.total-o.h)}</b>`:'Pago completo'}</div>
-  <div class="oks">Entrega: <b>${E(o.rango)}</b></div><div class="oks">${E(o.lugar)}</div>`;
+  <div class="oks">Entrega: <b>${E(o.rango)}</b></div><div class="oks">${E(o.lugar)}</div>
+  <div class="oks">WhatsApp: <b>${E(o.wa)}</b><br>Correo: <b>${E(o.email)}</b></div>
+  <div class="okr">${RECS(o.m).map(t=>`<p>${t}</p>`).join('')}</div>`;
  $('#okp').hidden=false;$('#okp').scrollTop=0;document.body.style.overflow='hidden'}
+async function imagenPedido(o){
+ await document.fonts.ready;
+ const W=900,P=64,c=document.createElement('canvas');c.width=W;c.height=3200;const g=c.getContext('2d');
+ g.fillStyle='#f6efe3';g.fillRect(0,0,W,3200);
+ const SER='Fraunces, Georgia, serif',SAN='"Nunito Sans", sans-serif',CAFE='#6e3418',TXT='#3b2a20',GRIS='#7a6a5c';
+ const wrap=(t,f,mw)=>{g.font=f;const out=[];let l='';for(const w of String(t).split(' ')){const x=l?l+' '+w:w;if(g.measureText(x).width>mw&&l){out.push(l);l=w}else l=x}out.push(l);return out};
+ let y=70;
+ const txt=(t,f,col,lh,al)=>{g.textAlign=al;g.fillStyle=col;for(const l of wrap(t,f,W-2*P)){g.font=f;g.fillText(l,al==='center'?W/2:P,y);y+=lh}};
+ const fila=(a,b,f,col)=>{g.font=f;g.fillStyle=col;g.textAlign='left';g.fillText(a,P,y);g.textAlign='right';g.fillText(b,W-P,y);y+=46};
+ const linea=()=>{g.strokeStyle='#e0d3bd';g.lineWidth=2;g.beginPath();g.moveTo(P,y);g.lineTo(W-P,y);g.stroke();y+=40};
+ const logo=await new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src='img/logo.png'});
+ if(logo){g.save();g.beginPath();g.arc(W/2,y+45,45,0,7);g.clip();g.drawImage(logo,W/2-45,y,90,90);g.restore()}
+ y+=150;
+ txt('¡Gracias'+(primer(o.nombre)?', '+primer(o.nombre):'')+'!','600 54px '+SER,CAFE,64,'center');
+ if(o.id){y+=8;txt('Pedido #'+o.id,'600 64px '+SER,'#5f7a22',76,'center')}
+ y+=8;txt('Recibimos tu precompra. Te escribiremos por WhatsApp para confirmarla.','400 28px '+SAN,TXT,40,'center');
+ y+=20;linea();
+ o.items.forEach(i=>fila(i.q+' × '+i.n,cop(i.s),'400 28px '+SAN,TXT));
+ y+=4;fila('Total',cop(o.total),'600 38px '+SER,CAFE);
+ txt(o.m?`Pagaste hoy ${cop(o.h)} · Pagas al recibir ${cop(o.total-o.h)}`:'Pago completo','400 26px '+SAN,GRIS,38,'left');
+ txt('Entrega: '+o.rango,'400 26px '+SAN,GRIS,38,'left');txt(o.lugar,'400 26px '+SAN,GRIS,38,'left');
+ y+=8;linea();
+ txt('WhatsApp: '+o.wa,'600 26px '+SAN,TXT,38,'left');txt('Correo: '+o.email,'600 26px '+SAN,TXT,38,'left');
+ y+=8;linea();
+ RECS(o.m).forEach(t=>{txt('• '+t,'400 24px '+SAN,'#5b4a3d',34,'left');y+=6});
+ y+=24;txt('Sabores y Sentidos Repostería · @saboresysentidos_reposteria','400 22px '+SAN,GRIS,30,'center');y+=30;
+ const out=document.createElement('canvas');out.width=W;out.height=y;const q=out.getContext('2d');
+ q.fillStyle='#f6efe3';q.fillRect(0,0,W,y);q.drawImage(c,0,0,W,y,0,0,W,y);return out}
+$('#okDesc').onclick=async()=>{if(!lastOk)return;const btn=$('#okDesc'),t=btn.textContent;btn.textContent='Preparando…';
+ try{const cv=await imagenPedido(lastOk),blob=await new Promise(r=>cv.toBlob(r,'image/png')),name='pedido-'+(lastOk.id||'sabores-y-sentidos')+'.png',file=new File([blob],name,{type:'image/png'});
+  if(/iPhone|iPad|iPod/.test(navigator.userAgent)&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file]})}catch{}}
+  else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}
+ }catch{}btn.textContent=t};
 $('#okCerrar').onclick=()=>{$('#okp').hidden=true;document.body.style.overflow='';window.scrollTo(0,0)};
 $('#f').addEventListener('submit',async e=>{e.preventDefault();const msg=$('#msg');msg.className='';msg.style.display='none';
  const total=resumen(),{m,h}=pagos(total);const show=(t,c)=>{msg.textContent=t;msg.className=c;msg.scrollIntoView({block:'center'})};
@@ -341,7 +384,7 @@ $('#f').addEventListener('submit',async e=>{e.preventDefault();const msg=$('#msg
    desde:fmt(a),hasta:fmt(b),total,pago:m?'mitad':'completo',anticipo:h,saldo:total-h,comprobante,
    items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({id:p.id,nombre:p.nombre,cantidad:qty[p.id]}))})});
   if(r.status===413)throw new Error('grande');if(!r.ok)throw 0;const j=await r.json().catch(()=>({}));
-  mostrarOk({id:j.id,items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({n:p.nombre,q:qty[p.id],s:precio(p)*qty[p.id]})),total,h,m,rango:+a===+b?fmt(a):fmt(a)+' al '+fmt(b),lugar:fd.get('municipio')+' · '+fd.get('direccion')});e.target.reset();compP=null;$('#compEst').textContent='';$('#carta').hidden=true;Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()
+  mostrarOk({id:j.id,nombre:fd.get('nombre'),wa:fd.get('whatsapp'),email:fd.get('email'),items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({n:p.nombre,q:qty[p.id],s:precio(p)*qty[p.id]})),total,h,m,rango:+a===+b?fmt(a):fmt(a)+' al '+fmt(b),lugar:fd.get('municipio')+' · '+fd.get('direccion')});e.target.reset();compP=null;$('#compEst').textContent='';$('#carta').hidden=true;Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()
  }catch(err){compP=null;show(err.message==='grande'?'El comprobante pesa demasiado. Súbelo como foto o captura de pantalla y lo ajustamos solos.':'No pudimos enviar el pedido. Inténtalo de nuevo y, si sigue fallando, escríbenos por WhatsApp.','err')}
  btn.disabled=false;btn.textContent='Enviar precompra'});
 </script>

@@ -1,5 +1,5 @@
 -- Pega esto en Supabase → SQL Editor → Run
-create table pedidos (
+create table if not exists pedidos (
   id bigint generated always as identity primary key,
   creado timestamptz default now(),
   estado text default 'pendiente',        -- pendiente | confirmado | entregado | cancelado
@@ -11,4 +11,4 @@ create table pedidos (
   comprobante_url text
 );
 alter table pedidos enable row level security;   -- sin políticas: solo el servidor (clave secreta) puede leer/escribir
-insert into storage.buckets (id, name, public) values ('comprobantes', 'comprobantes', false);
+insert into storage.buckets (id, name, public) values ('comprobantes', 'comprobantes', false) on conflict (id) do nothing;
