@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sabores y Sentidos Repostería · Navidad</title>
+<meta name="description" content="Cajas y detalles navideños hechos a mano. Haz tu precompra en línea.">
+<link rel="icon" href="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--crema:#f6efe3;--papel:#fffaf1;--cafe:#6e3418;--tinta:#3b2a20;--oliva:#5f7a22;--linea:#e2d6c2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--crema);color:var(--tinta);font:17px/1.6 'Nunito Sans',sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.15;margin:0}
+img{max-width:100%;display:block}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+header{padding:18px 0;border-bottom:1px solid var(--linea)}
+header .wrap{display:flex;align-items:center;gap:12px}
+header img{width:46px;height:46px;border-radius:50%}
+header b{font-family:Fraunces,serif;font-size:19px;color:var(--cafe)}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding:56px 0}
+.hero h1{font-size:clamp(34px,5vw,52px);color:var(--cafe)}
+.hero p{max-width:440px;margin:18px 0 26px}
+.hero img{border-radius:6px;aspect-ratio:4/5;object-fit:cover;object-position:50% 62%;box-shadow:0 10px 30px rgba(60,35,15,.18)}
+.btn{display:inline-block;background:var(--cafe);color:#fff;border:0;padding:14px 26px;border-radius:4px;font:600 16px 'Nunito Sans',sans-serif;text-decoration:none;cursor:pointer}
+.btn:hover{background:#56280f}.btn:disabled{opacity:.5;cursor:wait}
+section{padding:44px 0;border-top:1px solid var(--linea)}
+section>.wrap>h2{font-size:30px;color:var(--cafe);margin-bottom:6px}
+.sub{color:#6b5a4d;margin:0 0 26px}
+.fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px}
+.fotos figure{margin:0}
+.fotos img{aspect-ratio:1;object-fit:cover;object-position:50% 68%;border-radius:4px}
+.fotos figcaption{font-size:15px;margin-top:6px}
+.cajas{display:grid;gap:12px}
+.caja{display:grid;grid-template-columns:1fr auto auto;gap:18px;align-items:center;background:var(--papel);border:1px solid var(--linea);padding:16px 18px;border-radius:6px}
+.caja h3{font-size:19px}.caja small{color:#6b5a4d;display:block}
+.precio{font-family:Fraunces,serif;color:var(--oliva);font-size:19px;white-space:nowrap}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{width:34px;height:34px;border-radius:50%;border:1px solid var(--cafe);background:none;color:var(--cafe);font-size:20px;cursor:pointer;line-height:1}
+.qty span{min-width:20px;text-align:center}
+.destacada{border-color:var(--oliva);border-width:2px}
+form{display:grid;gap:18px}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:grid;gap:5px;font-weight:600;font-size:15px}
+input,textarea{font:inherit;padding:11px 12px;border:1px solid #cdbfa8;border-radius:4px;background:#fff;color:var(--tinta)}
+textarea{min-height:76px;resize:vertical}
+.full{grid-column:1/-1}
+.panel{background:var(--papel);border:1px solid var(--linea);border-radius:6px;padding:20px}
+.panel h3{font-size:20px;margin-bottom:10px}
+.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.cal-head button{background:none;border:1px solid var(--linea);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
+.cal .d{font-size:13px;color:#8a7a6b;padding:4px 0}
+.cal button{border:0;background:none;padding:9px 0;border-radius:4px;font:inherit;cursor:pointer;color:var(--tinta)}
+.cal button:disabled{color:#c9bcaa;cursor:not-allowed}
+.cal button:not(:disabled):hover{background:#eadfca}
+.cal .rango{background:#e4ecc9}.cal .borde{background:var(--oliva);color:#fff!important}
+.resumen{list-style:none;padding:0;margin:0 0 10px}
+.resumen li{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dotted var(--linea)}
+.total{display:flex;justify-content:space-between;font-family:Fraunces,serif;font-size:24px;color:var(--cafe)}
+.banco dt{font-size:14px;color:#6b5a4d}.banco dd{margin:0 0 8px;font-weight:600}
+#msg{padding:14px;border-radius:4px;display:none}
+.ok{background:#e4ecc9;display:block!important}.err{background:#f3d9d0;display:block!important}
+footer{padding:30px 0;text-align:center;color:#6b5a4d;font-size:15px;border-top:1px solid var(--linea)}
+@media(max-width:700px){.hero{grid-template-columns:1fr;padding:32px 0}.caja{grid-template-columns:1fr auto}.caja .qty{grid-column:1/-1}.campos{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><img src="img/logo.png" alt="Logo"><b>Sabores y Sentidos</b></div></header>
+
+<main>
+<div class="wrap hero">
+  <div>
+    <h1>Navidad con sabor a casa</h1>
+    <p>Tortas, turrón, galletas y trufas hechas a mano, en cajas listas para regalar. Reserva la tuya con una precompra y dinos cuándo quieres recibirla.</p>
+    <a class="btn" href="#pedido">Hacer mi pedido</a>
+  </div>
+  <img src="img/caja.jpg" alt="Caja navideña con lazo verde">
+</div>
+
+<section><div class="wrap">
+  <h2>Lo que hacemos</h2>
+  <p class="sub">Todo se prepara por encargo, en pequeñas cantidades.</p>
+  <div class="fotos">
+    <figure><img src="img/torta-navidad.jpg" alt=""><figcaption>Torta de navidad</figcaption></figure>
+    <figure><img src="img/manzana-banano.jpg" alt=""><figcaption>Torta de manzana y banano</figcaption></figure>
+    <figure><img src="img/turron.jpg" alt=""><figcaption>Turrón de chocolate</figcaption></figure>
+    <figure><img src="img/barritas.jpg" alt=""><figcaption>Barritas de avena y chocolate</figcaption></figure>
+    <figure><img src="img/galletas-dieteticas.jpg" alt=""><figcaption>Galletas dietéticas</figcaption></figure>
+    <figure><img src="img/galletas-mantequilla.jpg" alt=""><figcaption>Galletas de mantequilla y maní</figcaption></figure>
+    <figure><img src="img/trufas.jpg" alt=""><figcaption>Trufas de chocolate y maní</figcaption></figure>
+  </div>
+</div></section>
+
+<section id="pedido"><div class="wrap">
+  <h2>Haz tu precompra</h2>
+  <p class="sub">Elige tus cajas, cuéntanos cuándo las quieres y sube el comprobante de tu transferencia.</p>
+  <form id="f">
+    <div class="panel"><h3>1. Escoge tu presentación</h3><div class="cajas" id="lista"></div></div>
+
+    <div class="panel"><h3>2. Tus datos</h3>
+      <div class="campos">
+        <label>Nombre<input name="nombre" required autocomplete="name"></label>
+        <label>WhatsApp<input name="whatsapp" type="tel" required autocomplete="tel"></label>
+        <label>Correo<input name="email" type="email" required autocomplete="email"></label>
+        <label>Dirección de entrega<input name="direccion" required autocomplete="street-address"></label>
+        <label class="full">Notas (opcional)<textarea name="notas" placeholder="Alergias, tarjeta de regalo, indicaciones…"></textarea></label>
+      </div></div>
+
+    <div class="panel"><h3>3. ¿Cuándo quieres recibirlo?</h3>
+      <p class="sub" style="margin-bottom:10px">Toca el primer y el último día del rango en el que puedes recibir tu pedido.</p>
+      <div class="cal-head"><button type="button" id="prev" aria-label="Mes anterior">‹</button><b id="mes"></b><button type="button" id="next" aria-label="Mes siguiente">›</button></div>
+      <div class="cal" id="cal"></div>
+      <p id="rangoTxt" style="margin:10px 0 0;font-weight:600">Aún no has elegido fechas</p></div>
+
+    <div class="panel"><h3>4. Pago por transferencia</h3>
+      <dl class="banco">
+        <dt>Banco / Medio</dt><dd>BANCO · Cuenta de ahorros</dd>
+        <dt>Número</dt><dd>000 000 000 00</dd>
+        <dt>Titular</dt><dd>NOMBRE DEL TITULAR · C.C. 000.000.000</dd>
+      </dl>
+      <div class="total" style="margin:14px 0"><span>Total a transferir</span><span id="tot">$0</span></div>
+      <label>Sube tu comprobante (foto o PDF)<input type="file" id="comp" accept="image/*,.pdf" required></label></div>
+
+    <div class="panel"><h3>Resumen</h3><ul class="resumen" id="res"><li>Aún no has agregado nada</li></ul></div>
+    <div id="msg"></div>
+    <button class="btn" id="enviar" type="submit">Enviar precompra</button>
+  </form>
+</div></section>
+</main>
+
+<footer>Sabores y Sentidos Repostería · Hecho a mano con cariño</footer>
+
+<script>
+const PRODUCTOS=[
+ {id:'completa',nombre:'Caja completa de Navidad',desc:'Torta de navidad, torta de manzana y banano, turrón de trufa, 2 barritas, 4 galletas dietéticas, 6 galletas de mantequilla y maní y 4 trufas',precio:75000,dest:true},
+ {id:'c1',nombre:'Caja 1',desc:'Torta de navidad y turrón de chocolate',precio:30000},
+ {id:'c2',nombre:'Caja 2',desc:'Turrón de chocolate y barritas de avena y chocolate',precio:25000},
+ {id:'c3',nombre:'Caja 3',desc:'Torta de navidad y barritas de avena y chocolate',precio:25000},
+ {id:'c4',nombre:'Caja 4',desc:'Galletas dietéticas y torta de manzana y banano',precio:20000},
+ {id:'c5',nombre:'Caja 5',desc:'4 trufas de chocolate y maní',precio:10000},
+ {id:'c6',nombre:'Caja 6',desc:'6 trufas de chocolate y maní',precio:15000},
+ {id:'bolsa',nombre:'Bolsa de galletas',desc:'10 galletas de mantequilla y maní',precio:12000}
+];
+// Rango de fechas permitido para entrega (ajústalo a tu gusto)
+const MIN=new Date(2026,10,23), MAX=new Date(2026,11,24);
+
+const $=s=>document.querySelector(s), cop=n=>'$'+n.toLocaleString('es-CO'), qty={};
+const lista=$('#lista');
+PRODUCTOS.forEach(p=>{qty[p.id]=0;
+ const d=document.createElement('div');d.className='caja'+(p.dest?' destacada':'');
+ d.innerHTML=`<div><h3>${p.nombre}</h3><small>${p.desc}</small></div><div class="precio">${cop(p.precio)}</div>
+ <div class="qty"><button type="button" data-id="${p.id}" data-d="-1" aria-label="Quitar">−</button><span id="q-${p.id}">0</span><button type="button" data-id="${p.id}" data-d="1" aria-label="Agregar">+</button></div>`;
+ lista.appendChild(d)});
+lista.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ const id=b.dataset.id;qty[id]=Math.max(0,Math.min(20,qty[id]+ +b.dataset.d));$('#q-'+id).textContent=qty[id];resumen()});
+function resumen(){const sel=PRODUCTOS.filter(p=>qty[p.id]);const t=sel.reduce((a,p)=>a+p.precio*qty[p.id],0);
+ $('#res').innerHTML=sel.length?sel.map(p=>`<li><span>${qty[p.id]} × ${p.nombre}</span><span>${cop(p.precio*qty[p.id])}</span></li>`).join(''):'<li>Aún no has agregado nada</li>';
+ $('#tot').textContent=cop(t);return t}
+
+// Calendario de rango
+let vista=new Date(MIN.getFullYear(),MIN.getMonth(),1),a=null,b=null;
+const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const fmt=d=>d.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});
+function dibujar(){const y=vista.getFullYear(),m=vista.getMonth();$('#mes').textContent=MESES[m]+' '+y;
+ let h=['L','M','M','J','V','S','D'].map(x=>`<div class="d">${x}</div>`).join('');
+ const off=(new Date(y,m,1).getDay()+6)%7;h+='<span></span>'.repeat(off);
+ for(let i=1;i<=new Date(y,m+1,0).getDate();i++){const d=new Date(y,m,i),off=d<MIN||d>MAX;
+  let c='';if(a&&+d===+a||b&&+d===+b)c='borde';else if(a&&b&&d>a&&d<b)c='rango';
+  h+=`<button type="button" class="${c}" data-t="${+d}" ${off?'disabled':''}>${i}</button>`}
+ $('#cal').innerHTML=h;
+ $('#rangoTxt').textContent=a&&b?`Entre el ${fmt(a)} y el ${fmt(b)}`:a?`Desde el ${fmt(a)} — elige el último día`:'Aún no has elegido fechas'}
+$('#cal').addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;const d=new Date(+t.dataset.t);
+ if(!a||b||d<a){a=d;b=null}else b=d;dibujar()});
+$('#prev').onclick=()=>{vista=new Date(vista.getFullYear(),vista.getMonth()-1,1);dibujar()};
+$('#next').onclick=()=>{vista=new Date(vista.getFullYear(),vista.getMonth()+1,1);dibujar()};
+dibujar();resumen();
+
+// Comprimir imagen / leer archivo en base64
+function leer(file){return new Promise((ok,no)=>{
+ if(file.type.startsWith('image/')){const img=new Image();img.onload=()=>{const s=Math.min(1,1600/Math.max(img.width,img.height)),c=document.createElement('canvas');
+  c.width=img.width*s;c.height=img.height*s;c.getContext('2d').drawImage(img,0,0,c.width,c.height);ok({filename:'comprobante.jpg',content:c.toDataURL('image/jpeg',.8).split(',')[1]})};
+  img.onerror=no;img.src=URL.createObjectURL(file)}
+ else{if(file.size>3e6)return no(new Error('big'));const r=new FileReader();r.onload=()=>ok({filename:file.name,content:r.result.split(',')[1]});r.onerror=no;r.readAsDataURL(file)}})}
+
+$('#f').addEventListener('submit',async e=>{e.preventDefault();const msg=$('#msg');msg.className='';msg.style.display='none';
+ const total=resumen();const show=(t,c)=>{msg.textContent=t;msg.className=c;msg.scrollIntoView({block:'center'})};
+ if(!total)return show('Agrega al menos un producto.','err');
+ if(!a||!b)return show('Elige el rango de fechas en el calendario.','err');
+ const btn=$('#enviar');btn.disabled=true;btn.textContent='Enviando…';
+ try{const fd=new FormData(e.target),comprobante=await leer($('#comp').files[0]);
+  const r=await fetch('/api/pedido',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+   nombre:fd.get('nombre'),whatsapp:fd.get('whatsapp'),email:fd.get('email'),direccion:fd.get('direccion'),notas:fd.get('notas'),
+   desde:fmt(a),hasta:fmt(b),total,comprobante,
+   items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({nombre:p.nombre,cantidad:qty[p.id]}))})});
+  if(!r.ok)throw 0;
+  show('¡Gracias! Recibimos tu precompra. Te escribiremos por WhatsApp para confirmarla.','ok');e.target.reset();Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()
+ }catch{show('No pudimos enviar el pedido. Revisa que el comprobante pese menos de 3 MB e inténtalo de nuevo.','err')}
+ btn.disabled=false;btn.textContent='Enviar precompra'});
+</script>
+</body>
+</html>
