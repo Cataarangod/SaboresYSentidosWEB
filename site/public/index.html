@@ -4,90 +4,118 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sabores y Sentidos Repostería · Navidad</title>
-<meta name="description" content="Cajas y detalles navideños hechos a mano. Haz tu precompra en línea.">
+<meta name="description" content="Cajita Navideña Sabores y Sentidos: una selección artesanal para consentir a quienes más quieres.">
 <link rel="icon" href="img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--crema:#f6efe3;--papel:#fffaf1;--cafe:#6e3418;--tinta:#3b2a20;--oliva:#5f7a22;--linea:#e2d6c2}
+:root{--crema:#f6efe3;--papel:#fffaf1;--cafe:#6e3418;--tinta:#3b2a20;--oliva:#5f7a22;--linea:#e6dbc8;--gris:#7a6a5c}
 *{box-sizing:border-box}
-body{margin:0;background:var(--crema);color:var(--tinta);font:17px/1.6 'Nunito Sans',sans-serif}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--crema);color:var(--tinta);font:16px/1.55 'Nunito Sans',sans-serif;-webkit-text-size-adjust:100%}
+body.con-barra{padding-bottom:84px}
 h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.15;margin:0}
-img{max-width:100%;display:block}
-.wrap{max-width:980px;margin:0 auto;padding:0 22px}
-header{padding:18px 0;border-bottom:1px solid var(--linea)}
-header .wrap{display:flex;align-items:center;gap:12px}
-header img{width:46px;height:46px;border-radius:50%}
-header b{font-family:Fraunces,serif;font-size:19px;color:var(--cafe)}
-.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding:56px 0}
-.hero h1{font-size:clamp(34px,5vw,52px);color:var(--cafe)}
-.hero p{max-width:440px;margin:18px 0 26px}
-.hero img{border-radius:6px;aspect-ratio:4/5;object-fit:cover;object-position:50% 62%;box-shadow:0 10px 30px rgba(60,35,15,.18)}
-.btn{display:inline-block;background:var(--cafe);color:#fff;border:0;padding:14px 26px;border-radius:4px;font:600 16px 'Nunito Sans',sans-serif;text-decoration:none;cursor:pointer}
-.btn:hover{background:#56280f}.btn:disabled{opacity:.5;cursor:wait}
-section{padding:44px 0;border-top:1px solid var(--linea)}
-section>.wrap>h2{font-size:30px;color:var(--cafe);margin-bottom:6px}
-.sub{color:#6b5a4d;margin:0 0 26px}
-.fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px}
-.fotos figure{margin:0}
-.fotos img{aspect-ratio:1;object-fit:cover;object-position:50% 68%;border-radius:4px}
-.fotos figcaption{font-size:15px;margin-top:6px}
-.cajas{display:grid;gap:12px}
-.caja{display:grid;grid-template-columns:1fr auto auto;gap:18px;align-items:center;background:var(--papel);border:1px solid var(--linea);padding:16px 18px;border-radius:6px}
-.caja h3{font-size:19px}.caja small{color:#6b5a4d;display:block}
-.precio{font-family:Fraunces,serif;color:var(--oliva);font-size:19px;white-space:nowrap}
-.qty{display:flex;align-items:center;gap:10px}
-.qty button{width:34px;height:34px;border-radius:50%;border:1px solid var(--cafe);background:none;color:var(--cafe);font-size:20px;cursor:pointer;line-height:1}
-.qty span{min-width:20px;text-align:center}
-.destacada{border-color:var(--oliva);border-width:2px}
-form{display:grid;gap:18px}
-.campos{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-label{display:grid;gap:5px;font-weight:600;font-size:15px}
-input,textarea,select{font:inherit;padding:11px 12px;border:1px solid #cdbfa8;border-radius:4px;background:#fff;color:var(--tinta)}
-textarea{min-height:76px;resize:vertical}
+img{max-width:100%;display:block}a{color:inherit}
+.wrap{max-width:920px;margin:0 auto;padding:0 18px}
+header{position:sticky;top:0;z-index:20;background:rgba(246,239,227,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--linea)}
+header .wrap{display:flex;align-items:center;gap:10px;height:58px}
+header img{width:38px;height:38px;border-radius:50%}
+header b{font:600 17px Fraunces,serif;color:var(--cafe);flex:1}
+.pill{font-size:14px;font-weight:700;text-decoration:none;border:1.5px solid var(--cafe);color:var(--cafe);padding:6px 14px;border-radius:99px}
+.btn{display:inline-block;background:var(--cafe);color:#fff;border:0;padding:14px 26px;border-radius:99px;font:700 16px 'Nunito Sans',sans-serif;text-decoration:none;cursor:pointer;text-align:center;transition:background .2s,transform .1s}
+.btn:hover{background:#56280f}.btn:active{transform:scale(.98)}.btn:disabled{opacity:.5}
+.hero{display:grid;grid-template-columns:1fr 300px;gap:36px;align-items:center;padding:40px 0 34px}
+.etiq{display:inline-block;background:#e4ecc9;color:var(--oliva);font-weight:700;font-size:13px;padding:4px 12px;border-radius:99px;margin-bottom:14px}
+.hero h1{font-size:clamp(30px,6vw,44px);color:var(--cafe)}
+.hero p{margin:14px 0 22px;max-width:460px;color:#54443a}
+.hero img{width:100%;aspect-ratio:1;object-fit:cover;object-position:50% 68%;border-radius:20px;box-shadow:0 8px 24px rgba(60,35,15,.15)}
+.tira{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 18px 10px;margin:0 -18px;scrollbar-width:none}
+.tira::-webkit-scrollbar{display:none}
+.tira figure{margin:0;flex:0 0 112px;scroll-snap-align:start}
+.tira img{width:112px;height:112px;object-fit:cover;object-position:50% 70%;border-radius:14px}
+.tira figcaption{font-size:13px;line-height:1.3;margin-top:5px;color:var(--gris)}
+h2.t{font-size:26px;color:var(--cafe);margin:30px 0 4px}
+.sub{color:var(--gris);margin:0 0 18px;font-size:15px}
+.paso{background:var(--papel);border:1px solid var(--linea);border-radius:18px;padding:20px;margin-bottom:16px}
+.paso>h3{font-size:20px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.paso>h3 i{font:700 14px 'Nunito Sans',sans-serif;font-style:normal;background:var(--cafe);color:#fff;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;flex:none}
+.aviso{background:#e9efd3;border-radius:12px;padding:11px 14px;margin:0 0 14px;font-size:14.5px}
+.cajas{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.caja{background:#fff;border:1.5px solid var(--linea);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,box-shadow .2s}
+.caja.sel{border-color:var(--oliva);box-shadow:0 0 0 2px #dfe8c3}
+.caja.destacada{grid-column:1/-1}
+.cab{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.cab h3{font-size:18px}
+.precio{font:600 18px Fraunces,serif;color:var(--oliva);white-space:nowrap;text-align:right}
+.precio small{display:block;font:400 12px 'Nunito Sans',sans-serif;color:var(--gris)}
+.inc{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px;flex:1;align-content:flex-start}
+.inc li{display:flex;align-items:center;gap:8px;background:var(--crema);border-radius:10px;padding:4px 10px 4px 4px;font-size:13px;line-height:1.25}
+.inc img{width:36px;height:36px;border-radius:8px;object-fit:cover;object-position:50% 70%;flex:none}
+.qty{display:flex;align-items:center;justify-content:flex-end;gap:12px}
+.qty button{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--cafe);background:#fff;color:var(--cafe);font-size:22px;cursor:pointer;line-height:1;padding:0}
+.qty button:active{background:var(--cafe);color:#fff}
+.qty span{min-width:22px;text-align:center;font-weight:700;font-size:17px}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .full{grid-column:1/-1}
-.panel{background:var(--papel);border:1px solid var(--linea);border-radius:6px;padding:20px}
-.panel h3{font-size:20px;margin-bottom:10px}
+label{display:grid;gap:5px;font-weight:700;font-size:14.5px}
+input,textarea,select{font:inherit;font-weight:400;font-size:16px;padding:12px;border:1.5px solid #d6c9b2;border-radius:12px;background:#fff;color:var(--tinta);width:100%}
+input:focus,textarea:focus,select:focus{outline:0;border-color:var(--oliva);box-shadow:0 0 0 3px #dfe8c3}
+textarea{min-height:76px;resize:vertical}textarea[hidden]{display:none}
+.chk{display:flex!important;align-items:center;gap:10px;font-weight:600}.chk input{width:20px;height:20px;flex:none;accent-color:var(--cafe)}
 .cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.cal-head button{background:none;border:1px solid var(--linea);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px}
+.cal-head button{background:#fff;border:1px solid var(--linea);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:20px}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
-.cal .d{font-size:13px;color:#8a7a6b;padding:4px 0}
-.cal button{border:0;background:none;padding:9px 0;border-radius:4px;font:inherit;cursor:pointer;color:var(--tinta)}
-.cal button:disabled{color:#c9bcaa;cursor:not-allowed}
-.cal button:not(:disabled):hover{background:#eadfca}
-.cal .rango{background:#e4ecc9}.cal .borde{background:var(--oliva);color:#fff!important}
-.resumen{list-style:none;padding:0;margin:0 0 10px}
-.resumen li{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dotted var(--linea)}
-.total{display:flex;justify-content:space-between;font-family:Fraunces,serif;font-size:24px;color:var(--cafe)}
-.banco dt{font-size:14px;color:#6b5a4d}.banco dd{margin:0 0 8px;font-weight:600}
-#msg{padding:14px;border-radius:4px;display:none}
+.cal .d{font-size:12px;color:var(--gris);padding:4px 0}
+.cal button{border:0;background:none;min-height:42px;border-radius:10px;font:inherit;cursor:pointer;color:var(--tinta)}
+.cal button:disabled{color:#cfc3b0;cursor:not-allowed}
+.cal button:not(:disabled){background:#f2ecdd;font-weight:700}
+.cal button:not(:disabled):hover{background:#e4ecc9}
+.cal .rango{background:#e4ecc9!important}.cal .borde{background:var(--oliva)!important;color:#fff!important}
+.res{list-style:none;padding:0;margin:0 0 8px}
+.res li{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--linea)}
+.res .th{display:flex;flex:none}.res .th img{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 70%;border:2px solid var(--papel);margin-left:-10px}
+.res .th img:first-child{margin-left:0}
+.res .rt{flex:1;min-width:0}.res small{display:block;color:var(--gris);font-size:12.5px;line-height:1.3}
+.res .p{font-weight:700;white-space:nowrap}
+.res li.plano{padding:6px 0;border:0;display:flex;justify-content:space-between}
+.total{display:flex;justify-content:space-between;align-items:baseline;font:600 24px Fraunces,serif;color:var(--cafe);margin:14px 0}
+.opc{display:grid;gap:10px;margin:14px 0}
+.opc label{border:1.5px solid var(--linea);border-radius:12px;padding:12px;background:#fff}
+.bancos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 16px}
+.banco{background:#fff;border:1px solid var(--linea);border-radius:14px;padding:14px;font-size:14.5px}
+.banco h4{margin:0 0 6px;font:600 17px Fraunces,serif;color:var(--cafe)}
+.banco .num{font-weight:700;font-size:18px;letter-spacing:.3px;margin:2px 0}
+.copiar{margin-top:8px;background:none;border:1.5px solid var(--oliva);color:var(--oliva);border-radius:99px;padding:5px 14px;font:700 13px 'Nunito Sans',sans-serif;cursor:pointer}
+#msg{padding:14px;border-radius:12px;display:none;margin-bottom:12px}
 .ok{background:#e4ecc9;display:block!important}.err{background:#f3d9d0;display:block!important}
-footer{padding:30px 0;text-align:center;color:#6b5a4d;font-size:15px;border-top:1px solid var(--linea)}
-.aviso{background:#e4ecc9;border-radius:4px;padding:12px 14px;margin:0 0 14px;font-size:15px}
-.precio small{display:block;font:400 13px 'Nunito Sans',sans-serif;color:#8a7a6b;text-align:right}
-.chk{display:flex!important;align-items:center;gap:8px}.chk input{width:18px;height:18px}
-textarea[hidden]{display:none}
-@media(max-width:700px){.hero{grid-template-columns:1fr;padding:32px 0}.caja{grid-template-columns:1fr auto}.caja .qty{grid-column:1/-1}.campos{grid-template-columns:1fr}}
+#enviar{width:100%;padding:16px}
+#barra{display:none;position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--cafe);color:#fff;padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -4px 16px rgba(0,0,0,.15)}
+#barra.on{display:flex}#barra small{display:block;opacity:.85;font-size:13px}#barra b{font:600 20px Fraunces,serif}
+#barra a{background:#fff;color:var(--cafe);padding:11px 22px;border-radius:99px;font-weight:700;text-decoration:none}
+footer{padding:28px 18px 40px;text-align:center;color:var(--gris);font-size:14.5px}
+footer a{color:var(--cafe);font-weight:700;margin:0 8px}
+@media(max-width:640px){
+ .hero{grid-template-columns:1fr;gap:20px;padding:24px 0 20px}.hero img{aspect-ratio:16/10;border-radius:16px}
+ .cajas,.campos,.bancos{grid-template-columns:1fr}.paso{padding:16px;border-radius:16px}
+ .cab h3{font-size:17px}}
 </style>
 </head>
 <body>
-<header><div class="wrap"><img src="img/logo.png" alt="Logo"><b>Sabores y Sentidos</b></div></header>
+<header><div class="wrap"><img src="img/logo.png" alt="Logo"><b>Sabores y Sentidos</b><a class="pill" href="https://wa.me/573044286946" target="_blank" rel="noopener">WhatsApp</a></div></header>
 
-<main>
-<div class="wrap hero">
-  <div>
-    <h1>Navidad con sabor a casa</h1>
-    <p>Tortas, turrón, galletas y trufas hechas a mano, en cajas listas para regalar. Reserva la tuya con una precompra y dinos cuándo quieres recibirla.</p>
-    <a class="btn" href="#pedido">Hacer mi pedido</a>
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <span class="etiq" id="etiq">Navidad 2026</span>
+      <h1>La magia de la Navidad se comparte en la mesa.</h1>
+      <p>Presentamos nuestra Cajita Navideña Sabores y Sentidos: una selección artesanal pensada para consentir a quienes más quieres</p>
+      <a class="btn" href="#pedido">Hacer mi pedido</a>
+    </div>
+    <img src="img/caja.jpg" alt="Caja navideña con lazo verde">
   </div>
-  <img src="img/caja.jpg" alt="Caja navideña con lazo verde">
-</div>
 
-<section><div class="wrap">
-  <h2>Lo que hacemos</h2>
-  <p class="sub">Todo se prepara por encargo, en pequeñas cantidades.</p>
-  <div class="fotos">
+  <div class="tira" aria-label="Nuestros productos">
     <figure><img src="img/torta-navidad.jpg" alt=""><figcaption>Torta de navidad</figcaption></figure>
     <figure><img src="img/manzana-banano.jpg" alt=""><figcaption>Torta de manzana y banano</figcaption></figure>
     <figure><img src="img/turron.jpg" alt=""><figcaption>Turrón de chocolate</figcaption></figure>
@@ -96,19 +124,20 @@ textarea[hidden]{display:none}
     <figure><img src="img/galletas-mantequilla.jpg" alt=""><figcaption>Galletas de mantequilla y maní</figcaption></figure>
     <figure><img src="img/trufas.jpg" alt=""><figcaption>Trufas de chocolate y maní</figcaption></figure>
   </div>
-</div></section>
 
-<section id="pedido"><div class="wrap">
-  <h2>Haz tu precompra</h2>
-  <p class="sub">Elige tus cajas, cuéntanos cuándo las quieres y sube el comprobante de tu transferencia.</p>
+  <h2 class="t" id="pedido">Haz tu precompra</h2>
+  <p class="sub">Elige tus cajas, cuéntanos cuándo las quieres y sube el comprobante de tu pago.</p>
+
   <form id="f">
-    <div class="panel"><h3>1. Escoge tu presentación</h3><div class="aviso" id="precioAviso"></div><div class="cajas" id="lista"></div></div>
+    <div class="paso"><h3><i>1</i>Escoge tus cajas</h3>
+      <div class="aviso" id="precioAviso"></div>
+      <div class="cajas" id="lista"></div></div>
 
-    <div class="panel"><h3>2. Tus datos</h3>
+    <div class="paso" id="datos"><h3><i>2</i>Tus datos</h3>
       <div class="campos">
         <label>Nombre<input name="nombre" required autocomplete="name"></label>
-        <label>WhatsApp<input name="whatsapp" type="tel" required autocomplete="tel"></label>
-        <label>Correo<input name="email" type="email" required autocomplete="email"></label>
+        <label>WhatsApp<input name="whatsapp" type="tel" inputmode="tel" required autocomplete="tel"></label>
+        <label class="full">Correo<input name="email" type="email" required autocomplete="email"></label>
         <label>Municipio<select name="municipio" id="muni" required><option value="">Selecciona…</option><option>Bello</option><option>Medellín</option><option>Envigado</option><option>Itagüí</option><option>Sabaneta</option><option>La Estrella</option></select></label>
         <label><span id="dirLbl">Dirección de entrega</span><input name="direccion" id="dir" required autocomplete="street-address"></label>
         <p class="aviso full" style="margin:0">El envío no está incluido en el precio. Entregamos personalmente en Medellín y Envigado; en los demás municipios acordamos un punto de encuentro en una estación del metro.</p>
@@ -116,74 +145,85 @@ textarea[hidden]{display:none}
         <label class="full"><span class="chk"><input type="checkbox" id="cartaChk">Quiero agregar una mini carta escrita a mano (sin costo)</span><textarea name="carta" id="carta" maxlength="300" hidden placeholder="Escribe el mensaje y para quién es"></textarea></label>
       </div></div>
 
-    <div class="panel"><h3>3. ¿Cuándo quieres recibirlo?</h3>
-      <p class="sub" style="margin-bottom:10px">Entregamos los jueves, viernes y sábados. Toca el primer y el último día del rango en el que puedes recibir tu pedido.</p><div class="aviso" id="disp"></div>
+    <div class="paso"><h3><i>3</i>¿Cuándo quieres recibirlo?</h3>
+      <p class="sub" style="margin-bottom:10px">Entregamos jueves, viernes y sábados. En la semana de Navidad entregamos el lunes 21, martes 22 y miércoles 23 de diciembre (pedidos hasta el miércoles 16 de diciembre). Toca el primer y el último día del rango en el que puedes recibir tu pedido.</p>
+      <div class="aviso" id="disp"></div>
       <div class="cal-head"><button type="button" id="prev" aria-label="Mes anterior">‹</button><b id="mes"></b><button type="button" id="next" aria-label="Mes siguiente">›</button></div>
       <div class="cal" id="cal"></div>
-      <p id="rangoTxt" style="margin:10px 0 0;font-weight:600">Aún no has elegido fechas</p></div>
+      <p id="rangoTxt" style="margin:10px 0 0;font-weight:700">Aún no has elegido fechas</p></div>
 
-    <div class="panel"><h3>4. Pago por transferencia</h3>
-      <dl class="banco">
-        <dt>Banco / Medio</dt><dd>BANCOLOMBIA · Cuenta de ahorros</dd>
-        <dt>Número</dt><dd>37723530211</dd>
-        <dt>Titular</dt><dd>Catalina Arango · C.C. 1000638024</dd>
-      </dl>
-      <div style="display:grid;gap:8px;margin:6px 0 12px">
+    <div class="paso"><h3><i>4</i>Revisa y paga</h3>
+      <ul class="res" id="res"></ul>
+      <div class="opc">
         <label class="chk"><input type="radio" name="pago" value="completo" checked>Pago completo ahora</label>
         <label class="chk"><input type="radio" name="pago" value="mitad">Pago el 50% ahora y el resto al recibir mi pedido</label></div>
-      <ul class="resumen" id="pagoDet"></ul>
-      <div class="total" style="margin:14px 0"><span>Total a transferir hoy</span><span id="tot">$0</span></div>
+      <ul class="res" id="pagoDet"></ul>
+      <div class="total"><span>Total a pagar hoy</span><span id="tot">$0</span></div>
+      <div class="bancos">
+        <div class="banco"><h4>Bancolombia · Ahorros</h4><div class="num">377 235 302 11</div>Catalina Arango S<br>Documento 1000638024<br><button type="button" class="copiar" data-v="37723530211">Copiar número</button></div>
+        <div class="banco"><h4>Nequi</h4><div class="num">319 422 5017</div>Llave Nequi<br><button type="button" class="copiar" data-v="3194225017">Copiar llave</button></div>
+      </div>
       <label>Sube tu comprobante (foto o PDF)<input type="file" id="comp" accept="image/*,.pdf" required></label></div>
 
-    <div class="panel"><h3>Resumen</h3><ul class="resumen" id="res"><li>Aún no has agregado nada</li></ul></div>
     <div id="msg"></div>
     <button class="btn" id="enviar" type="submit">Enviar precompra</button>
+    <p class="sub" style="text-align:center;margin-top:12px">¿Dudas con tu pedido? <a href="https://wa.me/573044286946" target="_blank" rel="noopener" style="font-weight:700;color:var(--cafe)">Escríbenos al WhatsApp 304 428 6946</a></p>
   </form>
-</div></section>
 </main>
 
-<footer>Sabores y Sentidos Repostería · Hecho a mano con cariño</footer>
+<div id="barra"><div><small id="bn"></small><b id="bt"></b></div><a href="#datos">Continuar</a></div>
+<footer>Sabores y Sentidos Repostería · Hecho a mano con cariño<br><br>
+<a href="https://www.instagram.com/saboresysentidos_reposteria?rpxt=aWgzYWo2bXppcXRt" target="_blank" rel="noopener">Instagram</a>·<a href="https://wa.me/573044286946" target="_blank" rel="noopener">WhatsApp</a></footer>
 
 <script>
+const TN=['torta-navidad','Torta de navidad'],MB=['manzana-banano','Torta de manzana y banano'],TU=['turron','Turrón de chocolate'],
+ BA=['barritas','Barritas de avena y chocolate'],GD=['galletas-dieteticas','Galletas dietéticas'],GM=['galletas-mantequilla','Galletas de mantequilla y maní'],TR=['trufas','Trufas de chocolate y maní'];
+const n=(x,t)=>[x[0],t];
 const PRODUCTOS=[
- {id:'completa',nombre:'Caja completa de Navidad',desc:'Torta de navidad, torta de manzana y banano, turrón de trufa, 2 barritas, 4 galletas dietéticas, 6 galletas de mantequilla y maní y 4 trufas',precio:75000,dest:true},
- {id:'c1',nombre:'Caja 1',desc:'Torta de navidad y turrón de chocolate',precio:30000},
- {id:'c2',nombre:'Caja 2',desc:'Turrón de chocolate y barritas de avena y chocolate',precio:25000},
- {id:'c3',nombre:'Caja 3',desc:'Torta de navidad y barritas de avena y chocolate',precio:25000},
- {id:'c4',nombre:'Caja 4',desc:'Galletas dietéticas y torta de manzana y banano',precio:20000},
- {id:'c5',nombre:'Caja 5',desc:'4 trufas de chocolate y maní',precio:10000},
- {id:'c6',nombre:'Caja 6',desc:'6 trufas de chocolate y maní',precio:15000},
- {id:'bolsa',nombre:'Bolsa de galletas',desc:'10 galletas de mantequilla y maní',precio:12000}
+ {id:'completa',nombre:'Caja completa de Navidad',precio:75000,dest:true,inc:[TN,MB,n(TU,'Turrón de trufa'),n(BA,'2 barritas de avena y chocolate'),n(GD,'4 galletas dietéticas'),n(GM,'6 galletas de mantequilla y maní'),n(TR,'4 trufas de chocolate y maní')]},
+ {id:'c1',nombre:'Caja 1',precio:30000,inc:[TN,TU]},
+ {id:'c2',nombre:'Caja 2',precio:25000,inc:[TU,BA]},
+ {id:'c3',nombre:'Caja 3',precio:25000,inc:[TN,BA]},
+ {id:'c4',nombre:'Caja 4',precio:20000,inc:[GD,MB]},
+ {id:'c5',nombre:'Caja 5',precio:10000,inc:[n(TR,'4 trufas de chocolate y maní')]},
+ {id:'c6',nombre:'Caja 6',precio:15000,inc:[n(TR,'6 trufas de chocolate y maní')]},
+ {id:'bolsa',nombre:'Bolsa de galletas',precio:12000,inc:[n(GM,'10 galletas de mantequilla y maní')]}
 ];
 // ---- Reglas del negocio (ajústalas aquí) ----
-const INICIO=new Date(2026,10,20);   // primera entrega
-const MAX=new Date(2026,11,24);      // última entrega
-const SUBE=new Date(2026,11,1);      // desde esta fecha los precios suben 20%
+const INICIO=new Date(2026,10,19);  // primera entrega (jueves 19 de noviembre)
+const MAX=new Date(2026,11,23);     // última entrega
+const SUBE=new Date(2026,11,1);     // desde esta fecha los precios suben 15%
 const hoyStr=new Date().toLocaleDateString('en-CA',{timeZone:'America/Bogota'});
 const [hy,hm,hd]=hoyStr.split('-').map(Number), HOY=new Date(hy,hm-1,hd);
 const PREVENTA=HOY<SUBE;
-const redondea=n=>Math.ceil(n*1.2/500)*500;
+const redondea=v=>Math.ceil(v*115/100/500)*500;
 const precio=p=>PREVENTA?p.precio:redondea(p.precio);
-const resta=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()-n);
-// Entregas: jueves, viernes y sábado. Se pide a más tardar el sábado anterior al jueves de esa semana.
-const limitePedido=d=>resta(d,d.getDay()-4+5);
-const disponible=d=>d.getDay()>=4&&d>=INICIO&&d<=MAX&&HOY<=limitePedido(d);
+const resta=(d,k)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()-k);
+// Normal: jueves a sábado, pidiendo a más tardar el sábado anterior. Semana de Navidad: 21, 22 y 23 de dic., pedidos hasta el 16 de dic.
+const esNav=d=>d.getFullYear()===2026&&d.getMonth()===11&&d.getDate()>=21&&d.getDate()<=23;
+const limitePedido=d=>esNav(d)?new Date(2026,11,16):resta(d,d.getDay()-4+5);
+const disponible=d=>(d.getDay()>=4||esNav(d))&&d>=INICIO&&d<=MAX&&HOY<=limitePedido(d);
 let PRIMERA=null;for(let d=new Date(INICIO);d<=MAX&&!PRIMERA;d=resta(d,-1))if(disponible(d))PRIMERA=d;
 
-const $=s=>document.querySelector(s), cop=n=>'$'+n.toLocaleString('es-CO'), qty={};
+const $=s=>document.querySelector(s), cop=v=>'$'+v.toLocaleString('es-CO'), qty={};
+const ths=p=>p.inc.map(i=>`<img src="img/${i[0]}.jpg" alt="">`);
 const lista=$('#lista');
 PRODUCTOS.forEach(p=>{qty[p.id]=0;
- const d=document.createElement('div');d.className='caja'+(p.dest?' destacada':'');
- d.innerHTML=`<div><h3>${p.nombre}</h3><small>${p.desc}</small></div><div class="precio">${cop(precio(p))}${PREVENTA?`<small>desde 1 dic: ${cop(redondea(p.precio))}</small>`:''}</div>
+ const d=document.createElement('article');d.className='caja'+(p.dest?' destacada':'');d.id='c-'+p.id;
+ d.innerHTML=`<div class="cab"><h3>${p.nombre}</h3><div class="precio">${cop(precio(p))}${PREVENTA?`<small>desde 1 dic: ${cop(redondea(p.precio))}</small>`:''}</div></div>
+ <ul class="inc">${p.inc.map(i=>`<li><img src="img/${i[0]}.jpg" alt="" loading="lazy"><span>${i[1]}</span></li>`).join('')}</ul>
  <div class="qty"><button type="button" data-id="${p.id}" data-d="-1" aria-label="Quitar">−</button><span id="q-${p.id}">0</span><button type="button" data-id="${p.id}" data-d="1" aria-label="Agregar">+</button></div>`;
  lista.appendChild(d)});
 lista.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
  const id=b.dataset.id;qty[id]=Math.max(0,Math.min(20,qty[id]+ +b.dataset.d));$('#q-'+id).textContent=qty[id];resumen()});
 const pagos=t=>{const m=document.querySelector('input[name=pago]:checked').value==='mitad';return{m,h:m?Math.round(t/2):t}};
-function resumen(){const sel=PRODUCTOS.filter(p=>qty[p.id]);const t=sel.reduce((a,p)=>a+precio(p)*qty[p.id],0);
- $('#res').innerHTML=sel.length?sel.map(p=>`<li><span>${qty[p.id]} × ${p.nombre}</span><span>${cop(precio(p)*qty[p.id])}</span></li>`).join(''):'<li>Aún no has agregado nada</li>';
+function resumen(){const sel=PRODUCTOS.filter(p=>qty[p.id]);const t=sel.reduce((a,p)=>a+precio(p)*qty[p.id],0),u=sel.reduce((a,p)=>a+qty[p.id],0);
+ PRODUCTOS.forEach(p=>$('#c-'+p.id).classList.toggle('sel',qty[p.id]>0));
+ $('#res').innerHTML=sel.length?sel.map(p=>`<li><div class="th">${ths(p).join('')}</div><div class="rt"><b>${qty[p.id]} × ${p.nombre}</b><small>${p.inc.map(i=>i[1]).join(' · ')}</small></div><span class="p">${cop(precio(p)*qty[p.id])}</span></li>`).join(''):'<li class="plano"><span>Aún no has agregado nada</span></li>';
  const {m,h}=pagos(t);$('#tot').textContent=cop(h);
- $('#pagoDet').innerHTML=`<li><span>Total del pedido</span><span>${cop(t)}</span></li>`+(m?`<li><span>Pagas al recibir</span><span>${cop(t-h)}</span></li>`:'');return t}
+ $('#pagoDet').innerHTML=`<li class="plano"><span>Total del pedido</span><b>${cop(t)}</b></li>`+(m?`<li class="plano"><span>Pagas al recibir</span><b>${cop(t-h)}</b></li>`:'');
+ $('#barra').classList.toggle('on',u>0);document.body.classList.toggle('con-barra',u>0);
+ $('#bn').textContent=u+(u===1?' producto':' productos');$('#bt').textContent=cop(t);return t}
 
 // Calendario de rango
 const base=PRIMERA||INICIO;let vista=new Date(base.getFullYear(),base.getMonth(),1),a=null,b=null;
@@ -191,7 +231,7 @@ const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','
 const fmt=d=>d.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});
 function dibujar(){const y=vista.getFullYear(),m=vista.getMonth();$('#mes').textContent=MESES[m]+' '+y;
  let h=['L','M','M','J','V','S','D'].map(x=>`<div class="d">${x}</div>`).join('');
- const off=(new Date(y,m,1).getDay()+6)%7;h+='<span></span>'.repeat(off);
+ const off0=(new Date(y,m,1).getDay()+6)%7;h+='<span></span>'.repeat(off0);
  for(let i=1;i<=new Date(y,m+1,0).getDate();i++){const d=new Date(y,m,i),off=!disponible(d);
   let c='';if(a&&+d===+a||b&&+d===+b)c='borde';else if(a&&b&&d>a&&d<b&&!off)c='rango';
   h+=`<button type="button" class="${c}" data-t="${+d}" ${off?'disabled':''}>${i}</button>`}
@@ -203,13 +243,17 @@ $('#prev').onclick=()=>{vista=new Date(vista.getFullYear(),vista.getMonth()-1,1)
 $('#next').onclick=()=>{vista=new Date(vista.getFullYear(),vista.getMonth()+1,1);dibujar()};
 dibujar();resumen();
 document.querySelectorAll('input[name=pago]').forEach(r=>r.onchange=resumen);
-$('#precioAviso').innerHTML=PREVENTA?'<b>Preventa:</b> precios especiales hasta el 30 de noviembre. Desde el 1 de diciembre los pedidos tienen un incremento del 20%. Puedes agregar una mini carta escrita a mano.':'Desde el 1 de diciembre los precios tienen un incremento del 20%. La mini carta escrita a mano sigue incluida.';
+$('#precioAviso').innerHTML=PREVENTA?'<b>Preventa:</b> precios especiales hasta el 30 de noviembre. Desde el 1 de diciembre los pedidos tienen un incremento del 15%. Puedes agregar una mini carta escrita a mano.':'Desde el 1 de diciembre los precios tienen un incremento del 15%. La mini carta escrita a mano sigue incluida.';
+$('#etiq').textContent=PREVENTA?'Preventa hasta el 30 de noviembre':'Navidad 2026';
 if(PRIMERA)$('#disp').innerHTML=`Si pides hoy, tu primera fecha disponible es el <b>${fmt(PRIMERA)}</b>. Para recibirlo esa semana puedes pedir hasta el <b>${fmt(limitePedido(PRIMERA))}</b>.`;
 else{$('#disp').textContent='Ya cerramos los pedidos de Navidad. ¡Gracias por acompañarnos!';$('#enviar').disabled=true}
 $('#cartaChk').onchange=e=>{$('#carta').hidden=!e.target.checked};
 $('#muni').onchange=()=>{const pers=['Medellín','Envigado'].includes($('#muni').value);
  $('#dirLbl').textContent=pers?'Dirección de entrega':'Estación del metro donde prefieres recibirlo';
  $('#dir').placeholder=pers?'':'Ej.: Estación Itagüí (la confirmamos por WhatsApp)'};
+document.querySelectorAll('.copiar').forEach(btn=>btn.onclick=async()=>{const t=btn.textContent;
+ try{await navigator.clipboard.writeText(btn.dataset.v);btn.textContent='¡Copiado!'}catch{btn.textContent=btn.dataset.v}
+ setTimeout(()=>btn.textContent=t,1800)});
 
 // Comprimir imagen / leer archivo en base64
 function leer(file){return new Promise((ok,no)=>{
