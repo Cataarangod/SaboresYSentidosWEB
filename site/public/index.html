@@ -104,6 +104,16 @@ footer a{color:var(--cafe);font-weight:700;display:inline-block;padding:12px 10p
 #lb figure{margin:0;text-align:center;color:#fff}#lb img{max-height:78vh;max-width:100%;border-radius:12px;margin:0 auto}#lb figcaption{margin-top:10px;font-weight:700}
 #wa{position:fixed;right:14px;bottom:18px;z-index:25;background:#1f9d55;color:#fff;font-weight:700;text-decoration:none;min-height:48px;padding:0 20px;border-radius:99px;display:flex;align-items:center;box-shadow:0 4px 14px rgba(0,0,0,.25)}
 body.con-barra #wa{bottom:96px}
+#okp{position:fixed;inset:0;z-index:60;background:var(--crema);overflow-y:auto;padding:22px 16px 40px;display:flex;justify-content:center;align-items:flex-start}#okp[hidden]{display:none}
+.okc{background:var(--papel);border:1px solid var(--linea);border-radius:20px;padding:24px 20px;max-width:420px;width:100%;text-align:center}
+.okc img{width:44px;height:44px;border-radius:50%;margin:0 auto 6px}
+.okc .chk2{width:54px;height:54px;border-radius:50%;background:var(--oliva);color:#fff;font-size:30px;display:grid;place-items:center;margin:8px auto 10px}
+.okc h2{font-size:30px;color:var(--cafe)}.okn{font:600 34px Fraunces,serif;color:var(--oliva);margin:6px 0 8px}
+.okc p{margin:0 0 12px}.okl{list-style:none;margin:14px 0 6px;padding:10px 0;border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);text-align:left;font-size:15px}
+.okl li{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.okt{display:flex;justify-content:space-between;font:600 20px Fraunces,serif;color:var(--cafe);margin:8px 0 4px}
+.oks{font-size:14px;color:var(--gris);text-align:left;margin:4px 0}
+.okf{background:#e4ecc9;border-radius:12px;padding:10px;font-weight:700;margin:16px 0 14px!important}
 @media(max-width:640px){
  .hero{grid-template-columns:1fr;gap:20px;padding:24px 0 20px}.hero img{aspect-ratio:16/10;border-radius:16px}
  .cajas,.campos,.bancos{grid-template-columns:1fr}.paso{padding:16px;border-radius:16px}
@@ -191,6 +201,15 @@ body.con-barra #wa{bottom:96px}
 <footer>Sabores y Sentidos Repostería · Hecho a mano con cariño<br><br>
 <a href="https://www.instagram.com/saboresysentidos_reposteria?rpxt=aWgzYWo2bXppcXRt" target="_blank" rel="noopener">Instagram</a>·<a href="https://wa.me/573044286946" target="_blank" rel="noopener">WhatsApp</a></footer>
 
+<div id="okp" hidden><div class="okc" role="dialog" aria-modal="true" aria-label="Pedido recibido">
+  <img src="img/logo.png" alt="">
+  <div class="chk2">✓</div><h2>¡Gracias!</h2>
+  <div class="okn" id="okNum"></div>
+  <p>Recibimos tu precompra. Te escribiremos por WhatsApp para confirmarla.</p>
+  <div id="okRes"></div>
+  <p class="okf">Guarda este pantallazo</p>
+  <button type="button" class="btn" id="okCerrar" style="width:100%">Listo</button>
+</div></div>
 <script>
 const TN=['torta-navidad','Torta de navidad envinada','#e6a6a0','Envinada'],MB=['manzana-banano','Torta de manzana y banano','#ecd58a'],TU=['turron','Turrón de chocolate','#c49a7c'],
  BA=['barritas','Barritas de avena y chocolate','#b5cc85'],GD=['galletas-dieteticas','Galletas dietéticas','#9fcfc9'],GM=['galletas-mantequilla','Galletas de mantequilla y maní','#f0c597'],TR=['trufas','Trufas de chocolate y maní','#c8a4b8'];
@@ -302,6 +321,15 @@ $('#comp').onchange=async()=>{compP=null;const est=$('#compEst'),f=$('#comp').fi
  try{const c=await comp();est.textContent='Listo ✓ ('+Math.round(c.content.length*.75/1024)+' KB)'}
  catch(err){compP=null;$('#comp').value='';est.textContent=err.message==='grande'?'Este archivo pesa demasiado. Súbelo como foto o captura de pantalla.':'No pudimos leer este archivo. Prueba con una captura de pantalla.'}};
 
+const E=t=>String(t||'').replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+function mostrarOk(o){
+ $('#okNum').textContent=o.id?'Pedido #'+o.id:'';
+ $('#okRes').innerHTML=`<ul class="okl">${o.items.map(i=>`<li><span>${i.q} × ${E(i.n)}</span><b>${cop(i.s)}</b></li>`).join('')}</ul>
+  <div class="okt"><span>Total</span><span>${cop(o.total)}</span></div>
+  <div class="oks">${o.m?`Pagaste hoy <b>${cop(o.h)}</b> · Pagas al recibir <b>${cop(o.total-o.h)}</b>`:'Pago completo'}</div>
+  <div class="oks">Entrega: <b>${E(o.rango)}</b></div><div class="oks">${E(o.lugar)}</div>`;
+ $('#okp').hidden=false;$('#okp').scrollTop=0;document.body.style.overflow='hidden'}
+$('#okCerrar').onclick=()=>{$('#okp').hidden=true;document.body.style.overflow='';window.scrollTo(0,0)};
 $('#f').addEventListener('submit',async e=>{e.preventDefault();const msg=$('#msg');msg.className='';msg.style.display='none';
  const total=resumen(),{m,h}=pagos(total);const show=(t,c)=>{msg.textContent=t;msg.className=c;msg.scrollIntoView({block:'center'})};
  if(!total)return show('Agrega al menos un producto.','err');
@@ -313,7 +341,7 @@ $('#f').addEventListener('submit',async e=>{e.preventDefault();const msg=$('#msg
    desde:fmt(a),hasta:fmt(b),total,pago:m?'mitad':'completo',anticipo:h,saldo:total-h,comprobante,
    items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({id:p.id,nombre:p.nombre,cantidad:qty[p.id]}))})});
   if(r.status===413)throw new Error('grande');if(!r.ok)throw 0;const j=await r.json().catch(()=>({}));
-  show('¡Gracias! Recibimos tu precompra'+(j.id?' (pedido #'+j.id+')':'')+'. Te escribiremos por WhatsApp para confirmarla.','ok');e.target.reset();compP=null;$('#compEst').textContent='';$('#carta').hidden=true;Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()
+  mostrarOk({id:j.id,items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({n:p.nombre,q:qty[p.id],s:precio(p)*qty[p.id]})),total,h,m,rango:+a===+b?fmt(a):fmt(a)+' al '+fmt(b),lugar:fd.get('municipio')+' · '+fd.get('direccion')});e.target.reset();compP=null;$('#compEst').textContent='';$('#carta').hidden=true;Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()
  }catch(err){compP=null;show(err.message==='grande'?'El comprobante pesa demasiado. Súbelo como foto o captura de pantalla y lo ajustamos solos.':'No pudimos enviar el pedido. Inténtalo de nuevo y, si sigue fallando, escríbenos por WhatsApp.','err')}
  btn.disabled=false;btn.textContent='Enviar precompra'});
 </script>
