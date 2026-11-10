@@ -20,32 +20,38 @@ module.exports = async (req, res) => {
     const anticipo = mitad ? Math.round(total / 2) : total, saldo = total - anticipo;
     let id = null, url = null, dbOk = false;
 
-    // 1) Base de datos + comprobante
+    // 1) Base de datos: primero se guarda el pedido (para tener su número) y luego el comprobante como pedido-<id>
     if (SB && KEY) {
       try {
-        const ext = ((comprobante.filename || '').match(/\.(pdf|png|webp|heic|heif|jpe?g)$/i) || [, 'jpg'])[1].toLowerCase();
-        const MIME = { pdf: 'application/pdf', png: 'image/png', webp: 'image/webp', heic: 'image/heic', heif: 'image/heif' };
-        const path = `${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}.${ext}`;
-        const up = await sb(`/storage/v1/object/comprobantes/${path}`, {
-          method: 'POST', headers: { 'Content-Type': MIME[ext] || 'image/jpeg' },
-          body: Buffer.from(comprobante.content, 'base64'),
-        });
-        if (up.ok) {
-          const sg = await sb(`/storage/v1/object/sign/comprobantes/${path}`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ expiresIn: 31536000 }),
-          });
-          const j = await sg.json();
-          if (j.signedURL) url = SB + '/storage/v1' + j.signedURL;
-        }
         const ins = await sb('/rest/v1/pedidos', {
           method: 'POST', headers: { 'Content-Type': 'application/json', Prefer: 'return=representation' },
           body: JSON.stringify({
             nombre, whatsapp, email, municipio, direccion, notas, carta: carta || null,
             entrega_desde: desde, entrega_hasta: hasta, items: lineas, total, total_cliente: Number(b.total) || null,
-            preventa, pago: mitad ? 'mitad' : 'completo', anticipo, saldo, comprobante_url: url,
+            preventa, pago: mitad ? 'mitad' : 'completo', anticipo, saldo,
           }),
         });
         if (ins.ok) { id = (await ins.json())[0]?.id; dbOk = true; } else console.error('DB', await ins.text());
+        if (dbOk && id) {
+          try {
+            const esPdf = /\.pdf$/i.test(comprobante.filename || '');
+            const path = `pedido-${id}.${esPdf ? 'pdf' : 'jpg'}`;
+            const up = await sb(`/storage/v1/object/comprobantes/${path}`, {
+              method: 'POST', headers: { 'Content-Type': esPdf ? 'application/pdf' : 'image/jpeg', 'x-upsert': 'true' },
+              body: Buffer.from(comprobante.content, 'base64'),
+            });
+            if (up.ok) {
+              const sg = await sb(`/storage/v1/object/sign/comprobantes/${path}`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ expiresIn: 31536000 }),
+              });
+              const j = await sg.json();
+              if (j.signedURL) {
+                url = SB + '/storage/v1' + j.signedURL;
+                await sb(`/rest/v1/pedidos?id=eq.${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ comprobante_url: url }) });
+              }
+            } else console.error('Storage', await up.text());
+          } catch (e) { console.error('Storage', e); }
+        }
       } catch (e) { console.error('DB', e); }
     }
 

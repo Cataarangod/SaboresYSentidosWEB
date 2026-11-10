@@ -338,7 +338,7 @@ function mostrarOk(o){
   <div class="oks">Entrega: <b>${E(o.rango)}</b></div><div class="oks">${E(o.lugar)}</div>
   <div class="oks">WhatsApp: <b>${E(o.wa)}</b><br>Correo: <b>${E(o.email)}</b></div>
   <div class="okr">${RECS(o.m).map(t=>`<p>${t}</p>`).join('')}</div>`;
- $('#okp').hidden=false;$('#okp').scrollTop=0;document.body.style.overflow='hidden'}
+ $('#okp').hidden=false;$('#okp').scrollTop=0;document.body.style.overflow='hidden';bajar(true)}
 async function imagenPedido(o){
  await document.fonts.ready;
  const W=900,P=64,c=document.createElement('canvas');c.width=W;c.height=3200;const g=c.getContext('2d');
@@ -367,11 +367,14 @@ async function imagenPedido(o){
  y+=24;txt('Sabores y Sentidos Repostería · @saboresysentidos_reposteria','400 22px '+SAN,GRIS,30,'center');y+=30;
  const out=document.createElement('canvas');out.width=W;out.height=y;const q=out.getContext('2d');
  q.fillStyle='#f6efe3';q.fillRect(0,0,W,y);q.drawImage(c,0,0,W,y,0,0,W,y);return out}
-$('#okDesc').onclick=async()=>{if(!lastOk)return;const btn=$('#okDesc'),t=btn.textContent;btn.textContent='Preparando…';
+async function bajar(auto){
+ if(!lastOk)return;const ios=/iPhone|iPad|iPod/.test(navigator.userAgent);if(auto&&ios)return; // en iPhone solo se puede compartir con un toque
+ const btn=$('#okDesc'),t=btn.textContent;if(!auto)btn.textContent='Preparando…';
  try{const cv=await imagenPedido(lastOk),blob=await new Promise(r=>cv.toBlob(r,'image/png')),name='pedido-'+(lastOk.id||'sabores-y-sentidos')+'.png',file=new File([blob],name,{type:'image/png'});
-  if(/iPhone|iPad|iPod/.test(navigator.userAgent)&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file]})}catch{}}
+  if(ios&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file]})}catch{}}
   else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}
- }catch{}btn.textContent=t};
+ }catch{}btn.textContent=t}
+$('#okDesc').onclick=()=>bajar(false);
 $('#okCerrar').onclick=()=>{$('#okp').hidden=true;document.body.style.overflow='';window.scrollTo(0,0)};
 $('#f').addEventListener('submit',async e=>{e.preventDefault();const msg=$('#msg');msg.className='';msg.style.display='none';
  const total=resumen(),{m,h}=pagos(total);const show=(t,c)=>{msg.textContent=t;msg.className=c;msg.scrollIntoView({block:'center'})};
