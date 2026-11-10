@@ -297,9 +297,9 @@ $('#f').addEventListener('submit',async e=>{e.preventDefault();const msg=$('#msg
   const r=await fetch('/api/pedido',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
    nombre:fd.get('nombre'),whatsapp:fd.get('whatsapp'),email:fd.get('email'),municipio:fd.get('municipio'),direccion:fd.get('direccion'),notas:fd.get('notas'),carta:$('#cartaChk').checked?fd.get('carta'):'',preventa:PREVENTA,
    desde:fmt(a),hasta:fmt(b),total,pago:m?'mitad':'completo',anticipo:h,saldo:total-h,comprobante,
-   items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({nombre:p.nombre,cantidad:qty[p.id]}))})});
-  if(!r.ok)throw 0;
-  show('¡Gracias! Recibimos tu precompra. Te escribiremos por WhatsApp para confirmarla.','ok');e.target.reset();$('#carta').hidden=true;Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()
+   items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({id:p.id,nombre:p.nombre,cantidad:qty[p.id]}))})});
+  if(!r.ok)throw 0;const j=await r.json().catch(()=>({}));
+  show('¡Gracias! Recibimos tu precompra'+(j.id?' (pedido #'+j.id+')':'')+'. Te escribiremos por WhatsApp para confirmarla.','ok');e.target.reset();$('#carta').hidden=true;Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()
  }catch{show('No pudimos enviar el pedido. Revisa que el comprobante pese menos de 3 MB e inténtalo de nuevo.','err')}
  btn.disabled=false;btn.textContent='Enviar precompra'});
 </script>
