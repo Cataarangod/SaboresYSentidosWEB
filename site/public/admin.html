@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Pedidos · Sabores y Sentidos</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--crema:#f6efe3;--papel:#fffaf1;--cafe:#6e3418;--oliva:#5f7a22;--linea:#e6dbc8;--gris:#7a6a5c}
+*{box-sizing:border-box}body{margin:0;background:var(--crema);color:#3b2a20;font:16px/1.5 'Nunito Sans',sans-serif}
+h1,h2{font-family:Fraunces,serif;font-weight:600;margin:0;color:var(--cafe)}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+.card{background:var(--papel);border:1px solid var(--linea);border-radius:16px;padding:14px;margin-bottom:12px}
+input,select,button{font:inherit;padding:10px 12px;border:1.5px solid #d6c9b2;border-radius:10px;background:#fff}
+button{cursor:pointer;background:var(--cafe);color:#fff;border:0;font-weight:700}
+#login{max-width:340px;margin:18vh auto;text-align:center}#login input{width:100%;margin:12px 0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.tools input{flex:1;min-width:140px}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(min-width:640px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.k{background:#fff;border:1px solid var(--linea);border-radius:12px;padding:8px 10px}.k small{display:block;color:var(--gris);font-size:12.5px}.k b{font:600 19px Fraunces,serif;color:var(--cafe)}
+.k.v b{color:var(--oliva)}
+.sem{margin:22px 0 8px}.sem h2{font-size:21px}.sem p{margin:2px 0 8px;color:var(--gris);font-size:14.5px}
+.prod{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.prod span{background:#e9efd3;border-radius:99px;padding:3px 11px;font-size:14px}.prod em{font-style:normal;color:var(--gris)}
+.ped{border-left:6px solid #d9a441}.ped.confirmado{border-left-color:var(--oliva)}.ped.entregado{border-left-color:#7a8fa3}.ped.cancelado{border-left-color:#c0594a;opacity:.6}
+.ped header{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.ped header b{font-size:17px}
+.badge{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gris)}
+.ped ul{margin:6px 0;padding-left:18px}.meta,.din{font-size:14.5px;color:#54443a}.din b{color:var(--cafe)}
+.carta{background:#fbf0dd;border-radius:10px;padding:6px 10px;font-size:14.5px;margin:6px 0}
+.acc{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-top:10px;font-size:14.5px}
+.acc a{color:var(--cafe);font-weight:700}.acc label{display:flex;gap:6px;align-items:center}.acc input[type=checkbox]{width:18px;height:18px;padding:0}
+.acc select{padding:6px 8px}
+</style></head><body>
+<div id="login" class="card"><h1>Pedidos</h1><p>Sabores y Sentidos</p><input id="pw" type="password" placeholder="Clave" autocomplete="current-password"><button id="go" style="width:100%">Entrar</button><p id="err" style="color:#b3382c;margin:10px 0 0"></p></div>
+<div id="app" class="wrap" hidden>
+ <div class="top"><h1>Pedidos de Navidad</h1><button id="reload">Actualizar</button></div>
+ <div class="tools"><select id="fe"><option value="act">Activos (pendiente y confirmado)</option><option value="todos">Todos</option><option value="pendiente">Pendientes</option><option value="confirmado">Confirmados</option><option value="entregado">Entregados</option><option value="cancelado">Cancelados</option></select><input id="q" placeholder="Buscar nombre, #pedido, municipio…"></div>
+ <div id="tot" class="kpis" style="margin-bottom:6px"></div>
+ <div id="lista"></div>
+</div>
+<script>
+const $=s=>document.querySelector(s),cop=v=>'$'+(v||0).toLocaleString('es-CO'),esc=t=>String(t??'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+let KEY=sessionStorage.getItem('k')||'',DATA=[];
+const T={'Torta de navidad':1,'Torta de manzana y banano':1,'Turrón':1,'Barritas de avena y chocolate':2,'Galletas dietéticas':4,'Galletas de mantequilla y maní':6,'Trufas de chocolate y maní':4};
+const COMP={completa:{...T},c1:{'Torta de navidad':1,'Turrón':1},c2:{'Turrón':1,'Barritas de avena y chocolate':2},c3:{'Torta de navidad':1,'Barritas de avena y chocolate':2},
+ c4:{'Galletas dietéticas':4,'Torta de manzana y banano':1},c5:{'Trufas de chocolate y maní':4},c6:{'Trufas de chocolate y maní':6},bolsa:{'Galletas de mantequilla y maní':10}};
+async function api(method,body){const r=await fetch('/api/admin',{method,headers:{'x-admin-key':KEY,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+ if(r.status===401){sessionStorage.removeItem('k');$('#app').hidden=true;$('#login').hidden=false;$('#err').textContent='Clave incorrecta';throw 0}
+ return r.json()}
+async function cargar(){const j=await api('GET');if(!j.pedidos){$('#err').textContent=j.error||'Error';return}
+ DATA=j.pedidos;$('#login').hidden=true;$('#app').hidden=false;pintar()}
+$('#go').onclick=()=>{KEY=$('#pw').value;sessionStorage.setItem('k',KEY);$('#err').textContent='';cargar().catch(()=>{})};
+$('#pw').onkeydown=e=>{if(e.key==='Enter')$('#go').click()};
+$('#reload').onclick=()=>cargar();$('#fe').onchange=pintar;$('#q').oninput=pintar;
+function calc(l){const o={n:0,rec:0,cob:0,ver:0,pas:0};for(const p of l){if(p.estado==='cancelado')continue;o.n++;const sal=p.saldo||0;
+ if(p.estado==='pendiente'){o.ver+=p.anticipo||0;continue}
+ const r=(p.anticipo||0)+(p.saldo_cobrado?sal:0);o.rec+=r;if(!p.saldo_cobrado)o.cob+=sal;if(!p.pasado)o.pas+=r}return o}
+const kpis=c=>`<div class="k"><small>Pedidos</small><b>${c.n}</b></div><div class="k v"><small>Dinero recibido</small><b>${cop(c.rec)}</b></div><div class="k"><small>Por cobrar al entregar</small><b>${cop(c.cob)}</b></div><div class="k"><small>Por pasar a papá</small><b>${cop(c.pas)}</b></div>`+(c.ver?`<div class="k"><small>Por verificar (pendientes)</small><b>${cop(c.ver)}</b></div>`:'');
+function prod(l){const m={};for(const p of l){if(!['pendiente','confirmado','entregado'].includes(p.estado))continue;for(const i of p.items||[])for(const[k,v]of Object.entries(COMP[i.id]||{})){m[k]??=[0,0];m[k][p.estado==='pendiente'?1:0]+=v*i.cantidad}}
+ return Object.entries(m).map(([k,[a,b]])=>`<span><b>${a+b}</b> ${esc(k)}${b?` <em>(${b} por confirmar)</em>`:''}</span>`).join('')}
+const dm=d=>d.toLocaleDateString('es-CO',{day:'numeric',month:'short'}),dl=d=>d.toLocaleDateString('es-CO',{weekday:'short',day:'numeric',month:'short'});
+function semana(iso){if(!iso)return['9999','Sin fecha de entrega',''];const d=new Date(iso+'T12:00:00');
+ if(d.getMonth()===11&&d.getDate()>=21&&d.getDate()<=23)return['2026-12-21','Entregas de Navidad: 21, 22 y 23 de diciembre','Pedidos recibidos hasta el 16 de diciembre'];
+ const w=d.getDay(),th=new Date(d);th.setDate(d.getDate()+(w>=4?-(w-4):4-w));const add=n=>{const x=new Date(th);x.setDate(th.getDate()+n);return x};
+ return[th.toISOString().slice(0,10),`Entregas del ${dl(th)} al ${dl(add(2))}`,`Preparar del ${dl(add(-5))} al ${dl(add(-1))}`]}
+function tarjeta(p){const wa=String(p.whatsapp||'').replace(/\D/g,''),num=wa.length===10?'57'+wa:wa,sal=p.saldo||0;
+ const rec=p.estado==='pendiente'?0:(p.anticipo||0)+(p.saldo_cobrado?sal:0);
+ return`<article class="card ped ${p.estado}"><header><b>#${p.id} · ${esc(p.nombre)}</b><span class="badge">${esc(p.estado)}</span></header>
+ <div class="meta">Entrega: ${esc(p.entrega_desde)}${p.entrega_hasta&&p.entrega_hasta!==p.entrega_desde?' → '+esc(p.entrega_hasta):''}<br>${esc(p.municipio)} · ${esc(p.direccion)}</div>
+ <ul>${(p.items||[]).map(i=>`<li>${i.cantidad} × ${esc(i.nombre)}</li>`).join('')}</ul>
+ ${p.carta?`<div class="carta"><b>Mini carta:</b> ${esc(p.carta)}</div>`:''}${p.notas?`<div class="meta">Notas: ${esc(p.notas)}</div>`:''}
+ <div class="din">Total <b>${cop(p.total)}</b> · ${p.pago==='mitad'?`50% pagado ${cop(p.anticipo)}, saldo <b>${cop(sal)}</b>`:'Pago completo'} · ${p.preventa?'Preventa':'Precio completo'} · Recibido <b>${cop(rec)}</b></div>
+ <div class="acc"><a href="https://wa.me/${num}" target="_blank" rel="noopener">WhatsApp ${esc(p.whatsapp)}</a>${p.comprobante_url?`<a href="${esc(p.comprobante_url)}" target="_blank" rel="noopener">Ver comprobante</a>`:''}
+ <select data-id="${p.id}" data-f="estado">${['pendiente','confirmado','entregado','cancelado'].map(e=>`<option ${e===p.estado?'selected':''}>${e}</option>`).join('')}</select>
+ ${sal>0?`<label><input type="checkbox" data-id="${p.id}" data-f="saldo_cobrado" ${p.saldo_cobrado?'checked':''}>Saldo cobrado</label>`:''}
+ <label><input type="checkbox" data-id="${p.id}" data-f="pasado" ${p.pasado?'checked':''}>Dinero pasado a papá</label></div></article>`}
+function pintar(){const f=$('#fe').value,q=$('#q').value.toLowerCase().trim();
+ const l=DATA.filter(p=>(f==='todos'||(f==='act'?['pendiente','confirmado'].includes(p.estado):p.estado===f))&&(!q||`#${p.id} ${p.nombre} ${p.municipio} ${p.whatsapp}`.toLowerCase().includes(q)));
+ $('#tot').innerHTML=kpis(calc(l));const g={};
+ l.forEach(p=>{const[k,t,s]=semana(p.fecha_desde);(g[k]??={t,s,l:[]}).l.push(p)});
+ $('#lista').innerHTML=Object.keys(g).sort().map(k=>{const x=g[k];x.l.sort((a,b)=>(a.fecha_desde||'').localeCompare(b.fecha_desde||'')||a.id-b.id);
+  return`<div class="sem"><h2>${esc(x.t)}</h2><p>${esc(x.s)}</p><div class="kpis">${kpis(calc(x.l))}</div><div class="prod">${prod(x.l)}</div></div>${x.l.map(tarjeta).join('')}`}).join('')||'<p>No hay pedidos con este filtro.</p>'}
+$('#lista').addEventListener('change',async e=>{const t=e.target,id=+t.dataset.id,f=t.dataset.f;if(!f)return;
+ const v=t.type==='checkbox'?t.checked:t.value;try{await api('PATCH',{id,[f]:v});const p=DATA.find(x=>x.id===id);p[f]=v;pintar()}catch{}});
+if(KEY)cargar().catch(()=>{});
+</script></body></html>

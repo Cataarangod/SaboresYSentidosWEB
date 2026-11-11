@@ -8,7 +8,14 @@ create table if not exists pedidos (
   items jsonb, total int, total_cliente int, preventa boolean,
   pago text, anticipo int, saldo int,
   saldo_cobrado boolean default false,
-  comprobante_url text
+  comprobante_url text,
+  fecha_desde date, fecha_hasta date,
+  pasado boolean default false             -- dinero ya pasado a papá
 );
 alter table pedidos enable row level security;   -- sin políticas: solo el servidor (clave secreta) puede leer/escribir
 insert into storage.buckets (id, name, public) values ('comprobantes', 'comprobantes', false) on conflict (id) do nothing;
+
+-- Si la tabla ya existía, agrega las columnas nuevas:
+alter table pedidos add column if not exists fecha_desde date;
+alter table pedidos add column if not exists fecha_hasta date;
+alter table pedidos add column if not exists pasado boolean default false;

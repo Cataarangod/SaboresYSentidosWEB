@@ -5,6 +5,7 @@ const { calcular } = require('./_catalogo');
 
 const { SB, KEY, sb } = require('./_sb');
 const esc = (s = '') => String(s).replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
+const iso = v => (/^\d{4}-\d{2}-\d{2}$/.test(v || '') ? v : null);
 const cop = n => '$' + Number(n).toLocaleString('es-CO');
 
 module.exports = async (req, res) => {
@@ -27,7 +28,7 @@ module.exports = async (req, res) => {
           method: 'POST', headers: { 'Content-Type': 'application/json', Prefer: 'return=representation' },
           body: JSON.stringify({
             nombre, whatsapp, email, municipio, direccion, notas, carta: carta || null,
-            entrega_desde: desde, entrega_hasta: hasta, items: lineas, total, total_cliente: Number(b.total) || null,
+            entrega_desde: desde, entrega_hasta: hasta, fecha_desde: iso(b.desdeISO), fecha_hasta: iso(b.hastaISO), items: lineas, total, total_cliente: Number(b.total) || null,
             preventa, pago: mitad ? 'mitad' : 'completo', anticipo, saldo,
           }),
         });

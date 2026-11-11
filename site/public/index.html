@@ -149,7 +149,7 @@ body.con-barra #wa{bottom:96px}
 
   <h2 class="t" id="pedido">Haz tu precompra</h2>
   <p class="sub">Elige tus cajas, cuéntanos cuándo las quieres y sube el comprobante de tu pago.</p>
-  <p class="aviso">Recuerda que este es un proceso de precompra, y solo se confirma a través de WhatsApp para poder comprobar la información del pedido 🤍</p>
+  <p class="aviso">Recuerda que este es un proceso de precompra, y solo se confirma a través de WhatsApp para poder fijar fechas y verificar la veracidad del pedido 🤍</p>
 
   <form id="f">
     <div class="paso"><h3><i>1</i>Escoge tus cajas</h3>
@@ -182,7 +182,7 @@ body.con-barra #wa{bottom:96px}
       <div class="opc">
         <label class="chk"><input type="radio" name="pago" value="completo" checked>Pago completo ahora</label>
         <label class="chk"><input type="radio" name="pago" value="mitad">Pago el 50% ahora y el resto al recibir mi pedido</label></div>
-      <p class="aviso alerg" id="avisoMitad" hidden><b>Ten en cuenta:</b> El 50% abonado en la precompra reserva la producción y no es reembolsable. El saldo restante debe liquidarse al momento de la entrega para poder recibir el producto.</p>
+      <p class="aviso alerg" id="avisoMitad" hidden><b>Importante:</b> si el pedido no se paga en su totalidad al momento de la entrega, no se entrega y el 50% pagado no se reembolsa.</p>
       <ul class="res" id="pagoDet"></ul>
       <div class="total"><span>Total a pagar hoy</span><span id="tot">$0</span></div>
       <div class="bancos">
@@ -271,6 +271,7 @@ function resumen(){const sel=PRODUCTOS.filter(p=>qty[p.id]);const t=sel.reduce((
 // Calendario de rango
 const base=PRIMERA||INICIO;let vista=new Date(base.getFullYear(),base.getMonth(),1),a=null,b=null;
 const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const isoF=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const fmt=d=>d.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});
 function dibujar(){const y=vista.getFullYear(),m=vista.getMonth();$('#mes').textContent=MESES[m]+' '+y;
  let h=['L','M','M','J','V','S','D'].map(x=>`<div class="d">${x}</div>`).join('');
@@ -328,7 +329,7 @@ $('#comp').onchange=async()=>{compP=null;const est=$('#compEst'),f=$('#comp').fi
 const E=t=>String(t||'').replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
 let lastOk=null;
 const primer=n=>{const w=String(n||'').trim().split(/\s+/)[0]||'';return w?w[0].toUpperCase()+w.slice(1).toLowerCase():''};
-const RECS=m=>['Tu precompra solo queda confirmada cuando el pago, total o parcial, está hecho.','El valor del envío se define al confirmar por WhatsApp.'].concat(m?['El 50% abonado en la precompra reserva la producción y no es reembolsable. El saldo restante debe liquidarse al momento de la entrega para poder recibir el producto.']:[]);
+const RECS=m=>['Tu precompra solo queda confirmada cuando el pago, total o parcial, está hecho.','El valor del envío se define al confirmar por WhatsApp.'].concat(m?['Si el pedido no se paga en su totalidad al momento de la entrega, no se entrega y el 50% pagado no se reembolsa.']:[]);
 function mostrarOk(o){
  lastOk=o;$('#okH').textContent='¡Gracias'+(primer(o.nombre)?', '+primer(o.nombre):'')+'!';
  $('#okNum').textContent=o.id?'Pedido #'+o.id:'';
@@ -384,7 +385,7 @@ $('#f').addEventListener('submit',async e=>{e.preventDefault();const msg=$('#msg
  try{const fd=new FormData(e.target),comprobante=await comp();
   const r=await fetch('/api/pedido',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
    nombre:fd.get('nombre'),whatsapp:fd.get('whatsapp'),email:fd.get('email'),municipio:fd.get('municipio'),direccion:fd.get('direccion'),notas:fd.get('notas'),carta:$('#cartaChk').checked?fd.get('carta'):'',preventa:PREVENTA,
-   desde:fmt(a),hasta:fmt(b),total,pago:m?'mitad':'completo',anticipo:h,saldo:total-h,comprobante,
+   desde:fmt(a),hasta:fmt(b),desdeISO:isoF(a),hastaISO:isoF(b),total,pago:m?'mitad':'completo',anticipo:h,saldo:total-h,comprobante,
    items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({id:p.id,nombre:p.nombre,cantidad:qty[p.id]}))})});
   if(r.status===413)throw new Error('grande');if(!r.ok)throw 0;const j=await r.json().catch(()=>({}));
   mostrarOk({id:j.id,nombre:fd.get('nombre'),wa:fd.get('whatsapp'),email:fd.get('email'),items:PRODUCTOS.filter(p=>qty[p.id]).map(p=>({n:p.nombre,q:qty[p.id],s:precio(p)*qty[p.id]})),total,h,m,rango:+a===+b?fmt(a):fmt(a)+' al '+fmt(b),lugar:fd.get('municipio')+' · '+fd.get('direccion')});e.target.reset();compP=null;$('#compEst').textContent='';$('#carta').hidden=true;Object.keys(qty).forEach(k=>{qty[k]=0;$('#q-'+k).textContent=0});a=b=null;dibujar();resumen()
