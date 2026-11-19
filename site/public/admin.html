@@ -38,9 +38,9 @@ button{cursor:pointer;background:var(--cafe);color:#fff;border:0;font-weight:700
 <script>
 const $=s=>document.querySelector(s),cop=v=>'$'+(v||0).toLocaleString('es-CO'),esc=t=>String(t??'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
 let KEY=sessionStorage.getItem('k')||'',DATA=[];
-const T={'Torta de navidad':1,'Torta de manzana y banano':1,'Turrón':1,'Barritas de avena y chocolate':2,'Galletas dietéticas':4,'Galletas de mantequilla y maní':6,'Trufas de chocolate y maní':4};
-const COMP={completa:{...T},c1:{'Torta de navidad':1,'Turrón':1},c2:{'Turrón':1,'Barritas de avena y chocolate':2},c3:{'Torta de navidad':1,'Barritas de avena y chocolate':2},
- c4:{'Galletas dietéticas':4,'Torta de manzana y banano':1},c5:{'Trufas de chocolate y maní':4},c6:{'Trufas de chocolate y maní':6},bolsa:{'Galletas de mantequilla y maní':10}};
+const T={'Torta de navidad':1,'Torta de ciruelas envinada':1,'Turrón':1,'Cuadritos de avena y chocolate':2,'Galletas dietéticas':4,'Galletas de mantequilla y maní':6,'Trufas de chocolate y maní':4};
+const COMP={completa:{...T},c1:{'Torta de navidad':1,'Turrón':1},c2:{'Turrón':1,'Cuadritos de avena y chocolate':2},c3:{'Torta de navidad':1,'Cuadritos de avena y chocolate':2},
+ c4:{'Galletas dietéticas':4,'Torta de ciruelas envinada':1},c5:{'Trufas de chocolate y maní':4},c6:{'Trufas de chocolate y maní':6},bolsa:{'Galletas de mantequilla y maní':10}};
 async function api(method,body){const r=await fetch('/api/admin',{method,headers:{'x-admin-key':KEY,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
  if(r.status===401){sessionStorage.removeItem('k');$('#app').hidden=true;$('#login').hidden=false;$('#err').textContent='Clave incorrecta';throw 0}
  return r.json()}
